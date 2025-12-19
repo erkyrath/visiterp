@@ -176,7 +176,7 @@ function rebuild_sourcefile(nodel: HTMLDivElement, locstr: string, lochi: boolea
                     let ael = document.createElement('a');
                     ael.className = 'CommentButton';
                     let imgel = document.createElement('img');
-                    imgel.setAttribute('src', 'css/comment.svg');
+                    imgel.setAttribute('src', 'visiterp/css/comment.svg');
                     ael.appendChild(imgel);
                     ael.addEventListener('click', (ev) => { ev.preventDefault(); ev.stopPropagation(); handle_click_comment(token); });
                     linel.appendChild(ael);

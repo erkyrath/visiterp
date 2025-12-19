@@ -37,7 +37,7 @@ export function Commentary({ topic, smaller }: { topic:string, smaller?:boolean 
     
     return (
         <a className={ cla } onClick={ evhan_click_showtopic }>
-            <img src="css/comment.svg" />
+            <img src="visiterp/css/comment.svg" />
         </a>
     );
 }

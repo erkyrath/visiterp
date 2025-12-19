@@ -39,7 +39,7 @@ export function AppMenu()
     return (
         <>
             <button id="menubutton" className={ menuopen ? 'Selected' : '' } onClick={ handle_click_menu }>
-                <img src="css/menu.svg" />
+                <img src="visiterp/css/menu.svg" />
             </button>
             <div className={ menuopen ? 'Menu MenuOpen' : 'Menu' }>
                 <div>
@@ -73,7 +73,7 @@ export function AppMenu()
 function ArrangeButton({ arrange, curarrange, handle }: { arrange:string, curarrange:string, handle:(key:string)=>void })
 {
     let issel = (arrange == curarrange);
-    let imgsrc = "css/arrange-" + arrange + ".svg";
+    let imgsrc = "visiterp/css/arrange-" + arrange + ".svg";
     
     function handle_click_arrange(ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         ev.stopPropagation();
