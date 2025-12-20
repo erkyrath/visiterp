@@ -42,7 +42,7 @@ def load_gameinfo():
         match = pat.match(ln)
         typ, num, name = match.group(1), match.group(2), match.group(3)
         extra = match.group(4)
-        num = int(num)
+        num = 0 if num == '-' else int(num)
         if typ == 'Object':
             objname_to_num[name] = num
             objnum_to_name[num] = name
