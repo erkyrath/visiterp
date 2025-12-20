@@ -127,6 +127,9 @@ def teststaticcond(cgrp):
     return None
     
 def iseqzorknum(condgrp, zorknum):
+    # ZORK-NUMBER only occurs in Zork 1-3, Enchanter ("4") and Sorcerer ("5").
+    # Treating it specially is a bit of a hack; we may need to adjust this
+    # later if other compile-time constants turn up.
     if condgrp.matchform('==?', 2):
         keytok = condgrp.children[1]
         valtok = condgrp.children[2]
@@ -138,6 +141,7 @@ def iseqzorknum(condgrp, zorknum):
                     
 
 class Zcode:
+    ### This should be yoinked from <DIRECTIONS>
     directions = set(['NORTH', 'EAST', 'WEST', 'SOUTH', 'NE', 'NW', 'SE', 'SW', 'UP', 'DOWN', 'IN', 'OUT', 'LAND'])
         
     def __init__(self, tokls):
