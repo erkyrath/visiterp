@@ -197,6 +197,7 @@ function VisiZorkApp()
     }, []);
 
     if (releaseTarget == 'development') {
+        // In dev mode, we place some refs in global scope.
         (window as any).curzstate = zstate;
         (window as any).show_commentary = show_commentary;
     }
