@@ -4,7 +4,9 @@ import sys
 import re
 import json
 
-from writer import sourcefile_map
+from writer import get_sourcefile_map
+
+sourcefile_map = None
 
 def loadjsonp(filename):
     with open(filename) as infl:
@@ -162,6 +164,9 @@ def checktoken(token, linenum=None):
     return prefix, id, dest
 
 def parse(filename):
+    global sourcefile_map
+    sourcefile_map = get_sourcefile_map()
+    
     entries = []
     pat_head = re.compile(r'^\s*([a-zA-Z0-9-_?:]+):')
     

@@ -1,11 +1,13 @@
 import os.path
 import json
 
-from writer import sourcefile_map
+from writer import get_sourcefile_map
 from scolor import prep_syntax_coloring, colorize_file
 
 def write_source(filename):
+    sourcefile_map = get_sourcefile_map()
     print('...writing', len(sourcefile_map), 'source files:', filename)
+    
     map = {}
     for srcfile in sourcefile_map:
         pathname = os.path.join('gamesrc', srcfile)
@@ -22,7 +24,9 @@ def write_source(filename):
     fl.close()
     
 def write_source_colored(filename, zcode):
+    sourcefile_map = get_sourcefile_map()
     print('...writing colorized', len(sourcefile_map), 'source files:', filename)
+    
     prep_syntax_coloring(zcode)
     map = {}
     for srcfile in sourcefile_map:

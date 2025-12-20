@@ -1,21 +1,9 @@
 import json
 import re
 
-sourcefile_map = {
-    'zork1.zil':    'A',
-    '1actions.zil': 'B',
-    '1dungeon.zil': 'C',
-    'gclock.zil':   'D',
-    'gglobals.zil': 'E',
-    'gmacros.zil':  'F',
-    'gmain.zil':    'G',
-    'gparser.zil':  'H',
-    'gsyntax.zil':  'I',
-    'gverbs.zil':   'J',
-}
-
 info_loaded = False
 
+sourcefile_map = {}
 objnum_to_name = {}
 objname_to_num = {}
 propnum_to_name = {}
@@ -43,7 +31,10 @@ def load_gameinfo():
         typ, num, name = match.group(1), match.group(2), match.group(3)
         extra = match.group(4)
         num = 0 if num == '-' else int(num)
-        if typ == 'Object':
+        if typ == 'SourceFile':
+            val = chr(64+num)
+            sourcefile_map[name] = val
+        elif typ == 'Object':
             objname_to_num[name] = num
             objnum_to_name[num] = name
         elif typ == 'Property':
@@ -78,6 +69,8 @@ def load_gameinfo():
     info_loaded = True
 
 def sourceloc(tup=None, endtup=None, tok=None):
+    if not info_loaded:
+        raise Exception('sourcefile_map not loaded')
     if tok:
         tup = tok.pos
         endtup = tok.endpos
@@ -92,6 +85,10 @@ def sourceloc(tup=None, endtup=None, tok=None):
             raise Exception('sourceloc span across files')
         res += ':%d:%d' % (eline, echar,)
     return res
+
+def get_sourcefile_map():
+    load_gameinfo()
+    return sourcefile_map
 
 def write_dictwords(filename, dictdat):
     print('...writing dictword data:', filename)
