@@ -1,14 +1,14 @@
 import React from 'react';
 import { useState, useContext, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Root, createRoot } from 'react-dom/client';
+
+import { gamedat_ids, gamedat_global_names, gamedat_object_ids, sourceloc_start, find_sourceloc_for_id, sourceloc_for_srctoken } from '../custom/gamedat';
 
 import { ZStatePlus, get_updated_report } from './zstate';
 import { GnustoRunner, GnustoEngine } from './zstate';
 import { sourceloc_for_first_text } from './zstate';
-import { set_runner, show_commentary } from './combuild';
-import { default_prefs, get_cookie_prefs, set_cookie, set_body_ospref_theme, set_body_pref_theme, set_body_pref_arrange } from './cookie';
-import { gamedat_ids, gamedat_global_names, gamedat_object_ids, sourceloc_start, find_sourceloc_for_id, sourceloc_for_srctoken } from '../custom/gamedat';
+import { show_commentary } from './combuild';
+import { CookiePrefs, set_cookie, set_body_ospref_theme, set_body_pref_theme, set_body_pref_arrange } from './cookie';
 
 import { ContextContent, ReactCtx } from './context';
 import { SourceLocState, new_sourcelocstate } from './context';
@@ -23,43 +23,21 @@ import { GlobalState } from './globstate';
 import { GameMap } from './map';
 import { AboutPage } from './about';
 
-let runner: GnustoRunner;
-let engine: GnustoEngine;
-
 /* Hack alert: we're not running in Node.js here! But the rollup
    configuration replaces "process.env.NODE_ENV" with a static string,
    so we can check it. */
 const releaseTarget = process.env.NODE_ENV;
 
-let initprefs = default_prefs();
+let engine: GnustoEngine;
+let initprefs: CookiePrefs;
 
-export function init(runnerref: any)
+export function set_app_context(enginev: GnustoEngine, initprefsv: CookiePrefs)
 {
-    runner = runnerref;
-    engine = runner.e;
-
-    set_runner(runner);
-
-    engine.prepare_vm_report({
-        MAX_OBJECTS: gamedat_ids.MAX_OBJECTS,
-        MAX_GLOBALS: gamedat_ids.MAX_GLOBALS,
-        PROP_TABLE_START: gamedat_ids.PROP_TABLE_START,
-        PROP_TABLE_END: gamedat_ids.PROP_TABLE_END,
-        C_TABLE_LEN: gamedat_ids.C_TABLE_LEN,
-        C_TABLE_GLOB: gamedat_global_names.get('C-TABLE')!.num,
-    });
-    
-    initprefs = get_cookie_prefs();
-    set_body_pref_arrange(initprefs.arrange);
-    set_body_pref_theme(initprefs.theme);
-
-    const appel = document.getElementById('appbody') as HTMLElement;
-    let root = createRoot(appel);
-    if (root)
-        root.render( <VisiZorkApp /> );
+    engine = enginev;
+    initprefs = initprefsv;
 }
 
-function VisiZorkApp()
+export function VisiZorkApp()
 {
     let viewpaneref = useRefDiv();
     

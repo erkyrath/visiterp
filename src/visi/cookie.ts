@@ -2,7 +2,7 @@
    back out.
 */
 
-type CookiePrefs = {
+export type CookiePrefs = {
     readabout: boolean;
     shownumbers: boolean;
     theme: 'light'|'dark'|'system';
