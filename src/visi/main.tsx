@@ -13,15 +13,9 @@ import { CookiePrefs, set_cookie, set_body_ospref_theme, set_body_pref_theme, se
 import { ContextContent, ReactCtx } from './context';
 import { SourceLocState, new_sourcelocstate } from './context';
 import { AppMenu } from './menu';
-import { ObjectTree } from './objtree';
-import { ObjectPage } from './objpage';
-import { TimerTable } from './timers';
-import { CallActivity } from './activity';
-import { SourceFileList } from './filelist';
 import { SourceView } from './sourceview';
-import { GlobalState } from './globstate';
-import { GameMap } from './map';
-import { AboutPage } from './about';
+
+import { TabbedPane } from '../custom/tabs';
 
 /* Hack alert: we're not running in Node.js here! But the rollup
    configuration replaces "process.env.NODE_ENV" with a static string,
@@ -212,82 +206,6 @@ export function VisiZorkApp()
             </div>
             { menuel ? createPortal(<AppMenu />, menuel) : null }
         </ReactCtx.Provider>
-    );
-}
-
-const tab_list = [
-    [ 'activity', 'Activity' ],
-    [ 'objtree', 'World' ],
-    [ 'map', 'Map' ],
-    [ 'globals', 'State' ],
-    [ 'timers', 'Timers' ],
-    [ 'filelist', 'Files' ],
-    [ 'about', '?' ],
-];
-
-function TabbedPane()
-{
-    let rctx = useContext(ReactCtx);
-
-    let ells = tab_list.map(([key, label]) => {
-        let cla = 'TabItem';
-        if (key == rctx.tab)
-            cla += ' Selected';
-        else if (key == 'about' && !rctx.readabout)
-            cla += ' Flashing';
-        
-        function evhan_click(ev: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-            ev.stopPropagation();
-            rctx.setTab(key);
-        }
-    
-        return (
-            <div key={ key } className={ cla } onClick={ evhan_click }>
-                <span>{ label }</span>
-            </div>
-        );
-    });
-
-    let tabcontent;
-    switch (rctx.tab) {
-    case 'objtree':
-        if (rctx.objpage == 0)
-            tabcontent = <ObjectTree />;
-        else
-            tabcontent = <ObjectPage onum={ rctx.objpage } />;
-        break;
-    case 'activity':
-        tabcontent = <CallActivity />;
-        break;
-    case 'map':
-        tabcontent = <GameMap />;
-        break;
-    case 'globals':
-        tabcontent = <GlobalState />;
-        break;
-    case 'timers':
-        tabcontent = <TimerTable />;
-        break;
-    case 'filelist':
-        tabcontent = <SourceFileList />;
-        break;
-    case 'about':
-        tabcontent = <AboutPage />;
-        break;
-    default:
-        tabcontent = <>{ rctx.tab } not implemented</>;
-        break;
-    }
-    
-    return (
-        <>
-            <div className="TabBar">
-                { ells }
-            </div>
-            <div className="TabContent">
-                { tabcontent }
-            </div>
-        </>
     );
 }
 
