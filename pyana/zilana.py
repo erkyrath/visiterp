@@ -152,6 +152,7 @@ class Zcode:
         self.roomnames = []
         self.verbs = []
         self.verbmap = {}
+        self.attrnameset = set()
         self.directions = None
         self.directionset = None
 
@@ -252,6 +253,9 @@ class Zcode:
                                     self.strings.append(ZString(strtok.val, strtok.pos, strtok.endpos))
                         if proptok.matchgroup(self.directionset, 1):
                             self.findstringsintok(proptok)
+                        if proptok.matchgroup('FLAGS', 1):
+                            attrnames = [ atok.val for atok in proptok.children[1:] if atok.typ is TokType.ID ]
+                            self.attrnameset.update(attrnames)
                     newobj = ZObject(idtok.val, flag, desc, desctok, tok)
                     self.objects.append(newobj)
                     tok.defentity = newobj
