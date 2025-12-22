@@ -19,15 +19,39 @@ export function ObjectAttrList({ attr } : { attr:number })
     
     for (let tup of zstate.objects) {
         let obj = gamedat_object_ids.get(tup.onum);
+        if (!obj)
+            continue;
+        
+        let origattrs = zstate.origattrs.get(obj.onum) || 0;
         let curflag = (tup.attrs & (1 << (31-attr)));
-        if (curflag && obj) {
+        let origflag = (origattrs & (1 << (31-attr)));
+        
+        if (curflag || origflag) {
+            let changed = false;
+            let cla = '';
+            if (curflag) {
+                if (!origflag) {
+                    changed = true;
+                    cla = 'AddAttr';
+                }
+            }
+            else {
+                if (origflag) {
+                    changed = true;
+                    cla = 'DelAttr';
+                }
+            }
+            
             objls.push(
                 <li key={ obj.onum }>
                     { (rctx.shownumbers ?
                        <span className="ShowAddr">({ obj.onum }) </span>
                        : null) }
                     <ObjPageLink onum={ obj.onum } />
-                    <code>{ obj.name }</code>
+                    { (changed ?
+                       <span className="ChangedNote">*</span>
+                       : null) }
+                    <code className={ cla }>{ obj.name }</code>
                 </li>
             )
         }
