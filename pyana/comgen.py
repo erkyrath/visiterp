@@ -109,9 +109,9 @@ class Entry:
             dest = dest[ 1 : ].strip()
         # defaults to locsrc
 
-        prefix, id, _ = checktoken(dest, linenum=self.linenum)
+        prefix, id, srcloc = checktoken(dest, linenum=self.linenum)
 
-        if not prefix:
+        if not prefix or not srcloc:
             cla = 'com'
         elif use == 'loc':
             cla = 'src'
