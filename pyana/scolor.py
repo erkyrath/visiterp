@@ -47,13 +47,13 @@ def absorb_entities(ls, dupcheck=True):
             loctoentity[lockey] = obj
 
 class Color(StrEnum):
-    STR = 'STR'
-    ID = 'ID'
-    LOCALID = 'LOCALID'
-    IDDEF = 'IDDEF'
-    DICT = 'DICT'
-    COMMENT = 'COMMENT'
-    IFNDEF = 'IFNDEF'
+    STR = 'STR'           # String
+    ID = 'ID'             # Normal identifier (will link to def)
+    LOCALID = 'LOCALID'   # Local-variable identifier
+    IDDEF = 'IDDEF'       # Identifier being defined
+    DICT = 'DICT'         # Dictionary word
+    COMMENT = 'COMMENT'   # Commented-out element
+    IFNDEF = 'IFNDEF'     # Compiled-out element
 
 def colorize(tokls, res, defentity):
     localids = set()
