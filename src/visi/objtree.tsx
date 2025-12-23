@@ -7,7 +7,7 @@ import { ZObject } from './zstate';
 
 import { ReactCtx } from './context';
 import { ObjPageLink, Commentary } from './widgets';
-import { ObjListSorter, sorter_for_key } from '../custom/cwidgets';
+import { ObjListSorter, sorter_for_key, contains_label } from '../custom/cwidgets';
 
 export type ObjTreeContextContent = {
     map: Map<number, ZObject>;
@@ -136,13 +136,7 @@ function ShowObject({ tup, parentnum } : {tup:ZObject, parentnum:number})
 
     let childls = children.map((o) =>
         <ShowObject key={ o.onum } tup={ o } parentnum={ onum } /> );
-    let childlabel = '';
-    if (!obj.isroom) {
-        if (onum == gamedat_ids.ADVENTURER || onum == gamedat_ids.THIEF || onum == gamedat_ids.TROLL)
-            childlabel = 'carries';
-        else
-            childlabel = 'contains'
-    }
+    let childlabel = contains_label(obj);
 
     function evhan_click_select(ev: React.MouseEvent<HTMLLIElement, MouseEvent>) {
         ev.stopPropagation();
