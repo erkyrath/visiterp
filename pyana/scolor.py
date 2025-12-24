@@ -27,8 +27,8 @@ def colorize_file(filename):
     # now we leave them in.) (Also, the original parsing might have
     # game-specific monkeypatches which we now want to omit.)
     
-    lex = Lexer(filename)
-    tokls = lex.readfile(includes=False, monkeypatch=None)
+    lex = Lexer(filename, monkeypatch=None)
+    tokls = lex.readfile(includes=False)
     #dumptokens(tokls, withpos=True)
     
     res = []
