@@ -114,6 +114,9 @@ class Lexer:
     def getpos(self):
         return (self.filename, self.linenum, self.charnum)
 
+    def getposstr(self):
+        return '%s:%s:%s' % (self.filename, self.linenum, self.charnum)
+
     def readtoken(self):
         while True:
             ch = self.curchar
@@ -181,7 +184,7 @@ class Lexer:
                     elif self.curchar == '\\':
                         self.nextchar()
                         if self.curchar != '"':
-                            raise Exception('\\ not followed by "')
+                            raise Exception('%s: \\ not followed by "' % (self.getposstr(),))
                         val += '"'
                     elif self.curchar == '\n':
                         val += ' '
@@ -189,7 +192,7 @@ class Lexer:
                         val += self.curchar
                     self.nextchar()
                 if not self.curchar:
-                    raise Exception('unterminated string')
+                    raise Exception('%s: unterminated string' % (self.getposstr(),))
                 self.nextchar()
                 return Token(TokType.STR, val, pos, endpos=self.getpos())
             
