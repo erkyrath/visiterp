@@ -216,7 +216,7 @@ def write_routines(filename, zcode, txdat):
     load_gameinfo()
     
     if len(zcode.routines) != len(txdat.routines):
-        raise Exception('routine length mismatch')
+        raise Exception('routine length mismatch (%d vs %d)' % (len(zcode.routines), len(txdat.routines),))
     ls = []
     for zfunc, tfunc in zip(zcode.routines, txdat.routines):
         dat = {
