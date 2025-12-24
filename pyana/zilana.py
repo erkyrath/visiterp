@@ -306,7 +306,7 @@ class Zcode:
 
     def parseroutineargs(self, funcname, tok):
         if tok.typ is not TokType.GROUP:
-            raise Exception('args group is not a group')
+            raise Exception('%s: args group is not a group: %s' % (funcname, tok,))
         args = []
         callargcount = None
         for atok in tok.children:
