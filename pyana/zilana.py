@@ -153,8 +153,8 @@ class Zcode:
         self.verbs = []
         self.verbmap = {}
         self.attrnameset = set()
-        self.directions = None
-        self.directionset = None
+        self.directions = []
+        self.directionset = set()
 
     def build(self):
         self.findall()
@@ -213,6 +213,8 @@ class Zcode:
                     self.constants.append(zconst)
                     tok.defentity = zconst
             if tok.matchform('DIRECTIONS', 1):
+                if self.directions:
+                    raise Exception('Directions encountered twice')
                 self.directions = [ dirtok.val for dirtok in tok.children[ 1 : ] ]
                 self.directionset = set(self.directions)
             if tok.matchform('ROUTINE', 2):
