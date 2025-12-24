@@ -22,6 +22,8 @@ popt.add_option('--nostrip',
                 action='store_true', dest='nostrip')
 popt.add_option('--dump',
                 action='store_true', dest='dump')
+popt.add_option('--game',
+                action='store_true', dest='gameid', default='generic')
 popt.add_option('--gamedat',
                 action='store_true', dest='gamedat')
 popt.add_option('-t', '--txd',
