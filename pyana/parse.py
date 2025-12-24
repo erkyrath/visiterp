@@ -17,23 +17,32 @@ from gensource import write_source, write_source_colored
 popt = optparse.OptionParser()
 
 popt.add_option('-z', '--zil',
-                action='store', dest='zilfile')
+                action='store', dest='zilfile',
+                help='.zil file to parse (should be the main source file)')
 popt.add_option('--nostrip',
-                action='store_true', dest='nostrip')
+                action='store_true', dest='nostrip',
+                help='leave comments and ifdefed code in zil code')
 popt.add_option('--dump',
-                action='store_true', dest='dump')
+                action='store_true', dest='dump',
+                help='dump zil parse to stdout')
 popt.add_option('--game',
-                action='store_true', dest='gameid', default='generic')
+                action='store_true', dest='gameid', default='generic',
+                help='identifier of the game being parsed (indicates special cases)')
 popt.add_option('--gamedat',
-                action='store_true', dest='gamedat')
+                action='store_true', dest='gamedat',
+                help='write all possible gamedat JSON files')
 popt.add_option('-t', '--txd',
-                action='store_true', dest='txdfile')
+                action='store_true', dest='txdfile',
+                help='read game-dump.txt (needed to write routines.js and strings.js)')
 popt.add_option('-o', '--obj',
-                action='store_true', dest='objdump')
+                action='store_true', dest='objdump',
+                help='read obj-dump.txt (needed to write objects.js and strings.js)')
 popt.add_option('-d', '--dict',
-                action='store_true', dest='dictdump')
+                action='store_true', dest='dictdump',
+                help='read dict-dump.txt (needed to write dictwords.js)')
 popt.add_option('--src',
-                action='store_true', dest='sourcelist')
+                action='store_true', dest='sourcelist',
+                help='write source.js with syntax coloring')
 
 (opts, args) = popt.parse_args()
 
