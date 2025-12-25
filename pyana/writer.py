@@ -4,6 +4,7 @@ import re
 info_loaded = False
 
 sourcefile_map = {}
+sourcefile_binorder_map = {}
 objnum_to_name = {}
 objname_to_num = {}
 propnum_to_name = {}
@@ -33,7 +34,9 @@ def load_gameinfo():
         num = 0 if num == '-' else int(num)
         if typ == 'SourceFile':
             val = chr(64+num)
+            binorder = int(extra) if extra else val
             sourcefile_map[name] = val
+            sourcefile_binorder_map[name] = binorder
         elif typ == 'Object':
             objname_to_num[name] = num
             objnum_to_name[num] = name
