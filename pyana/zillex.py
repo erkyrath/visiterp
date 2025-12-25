@@ -257,6 +257,7 @@ class Lexer:
     def resolvemonkey(self, ls):
         if self.monkeypatch == 'zork2-r48-s840904':
             if self.filename == 'zork2.zil':
+                #### on the end is probably fine?
                 pos = None
                 for ix, tok in enumerate(ls):
                     if tok.matchform('IFILE', 1) and tok.children[1].val == 'GGLOBALS':
