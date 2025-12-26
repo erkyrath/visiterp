@@ -45,7 +45,11 @@ def load_gameinfo():
                 raise Exception('Object num repeats: %s' % (num,))
             objnum_to_name[num] = name
         elif typ == 'Property':
+            if name in propname_to_num:
+                raise Exception('Property name repeats: %s' % (name,))
             propname_to_num[name] = num
+            if num in propnum_to_name:
+                raise Exception('Property num repeats: %s' % (num,))
             propnum_to_name[num] = name
             property_list.append( (num, name) )
             if extra:
@@ -53,7 +57,11 @@ def load_gameinfo():
         elif typ == 'Attribute':
             attribute_list.append( (num, name) )
         elif typ == 'Global':
+            if name in globname_to_num:
+                raise Exception('Global name repeats: %s' % (name,))
             globname_to_num[name] = num
+            if num in globnum_to_name:
+                raise Exception('Global num repeats: %s' % (num,))
             globnum_to_name[num] = name
             if extra:
                 globname_to_vartype[name] = extra
