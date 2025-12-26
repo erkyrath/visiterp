@@ -98,7 +98,7 @@ def colorize(tokls, res, defentity):
                     if found:
                         res.append( (cgrp, Color.IFNDEF) )
                         continue
-                    found = teststaticcond(cgrp, teststaticcond)
+                    found = teststaticcond(cgrp, compileconstants)
                     if found:
                         colorize([ cgrp ], res, defentity)
                     else:

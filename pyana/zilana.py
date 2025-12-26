@@ -97,7 +97,6 @@ def findsetg(ls):
                 else:
                     raise Exception('SETG has no value: %s' % (idtok.val,))
                 map[idtok.val] = constval
-    print('### compileconstants', map)
     return map
             
 def stripcomments(ls):
@@ -154,16 +153,16 @@ def teststaticcond(cgrp, compileconstants):
             # it "true". In the future we may need to be more clever.
             return True
         if condgrp.matchform('==?', 2):
-            # ZORK-NUMBER only occurs in Zork 1-3, Enchanter ("4") and Sorcerer ("5").
-            # Treating it specially is a bit of a hack; we may need to adjust this
-            # later if other compile-time constants turn up.
             keytok = condgrp.children[1]
             valtok = condgrp.children[2]
             if keytok.typ is TokType.GROUP and keytok.val == "," and keytok.children:
                 kidtok = keytok.children[0]
-                if kidtok.typ is TokType.ID and kidtok.val == 'ZORK-NUMBER':
-                    if valtok.typ is TokType.NUM:
-                        return (valtok.num == 1) ###
+                if kidtok.typ is TokType.ID:
+                    if kidtok.val not in compileconstants:
+                        raise Exception('compile-time COND for unknown constant: %s' % (kidtok.val,))
+                    if valtok.typ is not TokType.NUM:
+                        raise Exception('compile-time COND for non-numeric constant: %s' % (kidtok.val,))
+                    return (valtok.num == compileconstants[kidtok.val])
         return False
 
     if evalstaticcond(condgrp):
