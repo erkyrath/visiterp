@@ -399,6 +399,10 @@ def compute_room_distances(filename, zcode):
     fl.write(';\n')
     fl.close()
 
+# This is cheesy, but we're going to trim down the error messages as
+# much as possible.
+notedmissing = set()
+    
 def compute_distance_from(zcode, map, fromroom):    
     reached = []
     reacheddist = {}
@@ -414,7 +418,15 @@ def compute_distance_from(zcode, map, fromroom):
 
     if len(reached) != len(zcode.roomnames):
         missing = set(zcode.roomnames) - set(reached)
-        print('failed to reach all rooms: missing: %s' % (' '.join(missing)))
+        newmissing = missing - notedmissing
+        notedmissing.update(missing)
+        newerr = ''
+        if newmissing:
+            if len(missing) == len(newmissing):
+                newerr = ': %s' % ((' '.join(newmissing)),)
+            else:
+                newerr = ': above plus %s' % ((' '.join(newmissing)),)
+        print('failed to reach all rooms from %s: missing %d%s' % (fromroom, len(missing), newerr))
     
     return reacheddist
     
