@@ -336,6 +336,7 @@ def write_constants(filename, zcode):
 def write_objects(filename, zcode, objdat):
     print('...writing object data:', filename)
     load_gameinfo()
+    globalprop = propname_to_num.get('GLOBAL')
     ls = []
     map = {}
     for obj in zcode.objects:
@@ -355,9 +356,8 @@ def write_objects(filename, zcode, objdat):
         }
         if obj.type == 'ROOM':
             dat['isroom'] = True
-        if 5 in odump.props:
-            # "GLOBAL" property
-            dat['scenery'] = odump.props[5]
+        if globalprop is not None and globalprop in odump.props:
+            dat['scenery'] = odump.props[globalprop]
         ls.append(dat)
         map[dat['onum']] = dat
 
