@@ -76,8 +76,32 @@ def markcomments(ls):
             continue
         if tok.typ is TokType.GROUP:
             markcomments(tok.children)
+
+def findsetg(ls):
+    # Find all top-level <SETG> constant definitions.
+    map = {}
+    for tok in ls:
+        if tok.matchform('SETG', 2):
+            idtok = tok.children[1]
+            if idtok.typ is TokType.ID:
+                valtok = tok.children[2]
+                if valtok.typ is TokType.NUM:
+                    constval = valtok.num
+                elif valtok.typ is TokType.STR:
+                    # ZIL conventionally has a SETG constant
+                    # SIBREAKS which is a string. We're just gonna
+                    # handwave that.
+                    constval = 0
+                elif valtok.typ is TokType.GROUP and not valtok.children:
+                    constval = 0
+                else:
+                    raise Exception('SETG has no value: %s' % (idtok.val,))
+                map[idtok.val] = constval
+    print('### compileconstants', map)
+    return map
             
 def stripcomments(ls):
+    # Remove all commented-out elements from ls.
     newls = []
     for tok in ls:
         if tok.typ is TokType.GROUP and tok.val == ';':
@@ -88,7 +112,8 @@ def stripcomments(ls):
     ls.clear()
     ls.extend(newls)
 
-def stripifdefs(ls):
+def stripifdefs(ls, compileconstants):
+    # Remove all compiled-out %<COND...> elements from ls.
     newls = []
     for tok in ls:
         if tok.typ is TokType.GROUP and tok.val == '%' and tok.children:
@@ -96,7 +121,7 @@ def stripifdefs(ls):
             if ctok.matchform('COND', 0):
                 found = None
                 for cgrp in ctok.children[ 1 : ]:
-                    found = teststaticcond(cgrp)
+                    found = teststaticcond(cgrp, compileconstants)
                     if found:
                         break
                 if found:
@@ -104,45 +129,48 @@ def stripifdefs(ls):
                 continue
         newls.append(tok)
         if tok.typ is TokType.GROUP:
-            stripifdefs(tok.children)
+            stripifdefs(tok.children, compileconstants)
     ls.clear()
     ls.extend(newls)
 
-def teststaticcond(cgrp):
+def teststaticcond(cgrp, compileconstants):
     if cgrp.typ is TokType.GROUP and cgrp.val == '()' and len(cgrp.children) == 2:
         condgrp = cgrp.children[0]
         resgrp = cgrp.children[1]
+    else:
+        raise Exception('teststaticcond: not a group')
 
-    if condgrp.matchform('OR', 2):
-        for subcond in condgrp.children[1:]:
-            if iseqzorknum(subcond, 1):
-                return resgrp
+    def evalstaticcond(condgrp):
+        if condgrp.matchform('OR', 2):
+            for subcond in condgrp.children[1:]:
+                if evalstaticcond(subcond):
+                    return True
+            return False
+        if condgrp.typ is TokType.ID and condgrp.val == 'T':
+            return True
+        if condgrp.matchform('GASSIGNED?', 1):
+            # This tests whether a symbol is globally assigned. To date,
+            # we only check PREDGEN this way, and it suffices to hardwire
+            # it "true". In the future we may need to be more clever.
+            return True
+        if condgrp.matchform('==?', 2):
+            # ZORK-NUMBER only occurs in Zork 1-3, Enchanter ("4") and Sorcerer ("5").
+            # Treating it specially is a bit of a hack; we may need to adjust this
+            # later if other compile-time constants turn up.
+            keytok = condgrp.children[1]
+            valtok = condgrp.children[2]
+            if keytok.typ is TokType.GROUP and keytok.val == "," and keytok.children:
+                kidtok = keytok.children[0]
+                if kidtok.typ is TokType.ID and kidtok.val == 'ZORK-NUMBER':
+                    if valtok.typ is TokType.NUM:
+                        return (valtok.num == 1) ###
+        return False
+
+    if evalstaticcond(condgrp):
+        return resgrp
+    else:
         return None
-    if condgrp.typ is TokType.ID and condgrp.val == 'T':
-        return resgrp
-    if condgrp.matchform('GASSIGNED?', 1):
-        # This tests whether a symbol is globally assigned. To date,
-        # we only check PREDGEN this way, and it suffices to hardwire
-        # it "true". In the future we may need to be more clever.
-        return resgrp
-    if iseqzorknum(condgrp, 1):
-        return resgrp
-    ### DEBUG false
-    return None
-    
-def iseqzorknum(condgrp, zorknum):
-    # ZORK-NUMBER only occurs in Zork 1-3, Enchanter ("4") and Sorcerer ("5").
-    # Treating it specially is a bit of a hack; we may need to adjust this
-    # later if other compile-time constants turn up.
-    if condgrp.matchform('==?', 2):
-        keytok = condgrp.children[1]
-        valtok = condgrp.children[2]
-        if keytok.typ is TokType.GROUP and keytok.val == "," and keytok.children:
-            kidtok = keytok.children[0]
-            if kidtok.typ is TokType.ID and kidtok.val == 'ZORK-NUMBER':
-                if valtok.typ is TokType.NUM:
-                    return (valtok.num == zorknum)
-                    
+
 
 class Zcode:
     def __init__(self, tokls):
@@ -201,6 +229,7 @@ class Zcode:
             if tok.matchform('CONSTANT', 2) or tok.matchform('SETG', 2):
                 # SETG is for compile-time constants like ZORK-NUMBER and
                 # DEBUG. We'll put them in the regular constant table.
+                # (This duplicates the logic of findsetg() above. Sorry.)
                 setg = (tok.children[0].val == 'SETG')
                 idtok = tok.children[1]
                 if idtok.typ is TokType.ID:

@@ -9,6 +9,7 @@ import optparse
 from zillex import Lexer, dumptokens
 from zilana import Zcode
 from zilana import stripcomments
+from zilana import findsetg
 from zilana import stripifdefs
 from txdparse import TXDData, ObjDumpData, DictDumpData
 from writer import write_properties, write_attributes, write_verbs, write_constants, write_globals, write_objects, write_routines, write_strings, write_dictwords, compute_room_distances
@@ -52,7 +53,9 @@ if opts.zilfile:
     ls = lex.readfile(includes=True)
     if not opts.nostrip:
         stripcomments(ls)
-        stripifdefs(ls)
+    compileconstants = findsetg(ls)
+    if not opts.nostrip:
+        stripifdefs(ls, compileconstants)
     if opts.dump:
         dumptokens(ls, withpos=False)
     zcode = Zcode(ls)
