@@ -116,32 +116,39 @@ export function ObjectPage({ onum } : { onum:number })
         let origflag = (origattrs & (1 << (31-index)));
         if (curflag || origflag) {
             let attr = gamedat_attribute_nums.get(index);
-            if (!attr)
-                continue;
-
-            let changed = false;
-            let cla = '';
-            if (curflag) {
-                if (!origflag) {
-                    changed = true;
-                    cla = 'AddAttr';
-                }
+            if (!attr) {
+                attrls.push(
+                    <span key={ index }>
+                        { attrls.length ? ', ' : '' }
+                        ??? { index }
+                    </span>
+                );
             }
             else {
-                if (origflag) {
-                    changed = true;
-                    cla = 'DelAttr';
+                let changed = false;
+                let cla = '';
+                if (curflag) {
+                    if (!origflag) {
+                        changed = true;
+                        cla = 'AddAttr';
+                    }
                 }
+                else {
+                    if (origflag) {
+                        changed = true;
+                        cla = 'DelAttr';
+                    }
+                }
+                attrls.push(
+                    <span key={ index }>
+                        { attrls.length ? ', ' : '' }
+                        { (changed ?
+                           <span className="ChangedNote">*</span>
+                           : null) }
+                        <a className="Src_Id" href="#" onClick={ (ev) => evhan_click_focus_attr(ev, attr.num) }><code className={ cla }>{ attr.name }</code></a>{' '}
+                    </span>
+                );
             }
-            attrls.push(
-                <span key={ index }>
-                    { attrls.length ? ', ' : '' }
-                    { (changed ?
-                       <span className="ChangedNote">*</span>
-                       : null) }
-                    <a className="Src_Id" href="#" onClick={ (ev) => evhan_click_focus_attr(ev, attr.num) }><code className={ cla }>{ attr.name }</code></a>{' '}
-                </span>
-            );
         }
         index++;
     }
@@ -223,7 +230,7 @@ function ObjPropertyList({ pnum, values, origvalues }: { pnum:number, values:num
     
     let prop = gamedat_property_nums.get(pnum);
     if (!prop) {
-        return <li>??? { prop }</li>;
+        return <li>??? { pnum }</li>;
     }
 
     let propvalues;
