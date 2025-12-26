@@ -106,8 +106,13 @@ export function StackPrint({ print }: { print:ZStackPrint })
         ev.stopPropagation();
         ctx.setSelected([-1, print.addr]);
         if (strdat) {
-            let loc = (typeof strdat.sourceloc === 'string') ? strdat.sourceloc : strdat.sourceloc[0]; //###?
-            rctx.setLoc(loc, true);
+            if (strdat.sourceloc) {
+                let loc = (typeof strdat.sourceloc === 'string') ? strdat.sourceloc : strdat.sourceloc[0]; //###?
+                rctx.setLoc(loc, true);
+            }
+            else {
+                console.log('BUG: string location missing', strdat);
+            }
         }
     }
 
