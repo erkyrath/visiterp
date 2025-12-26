@@ -155,13 +155,13 @@ export function StackCall({ call }: { call:ZStackCall })
     for (let arg of call.args) {
         let argtype: string|null = argtypes[counter];
         let el = (
-            <>
+            <span key={ counter }>
                 {' '}
                 { ((rctx.shownumbers && argtype) ? <span className="ShowAddr">{ arg }:</span> : null) }
                 <StackCallCtx.Provider value={ call }>
-                    <StackCallArg key={ counter } value={ arg } argtype={ argtype } />
+                    <StackCallArg value={ arg } argtype={ argtype } />
                 </StackCallCtx.Provider>
-            </>
+            </span>
         )
         argls.push(el);
         counter++;
