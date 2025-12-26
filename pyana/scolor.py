@@ -14,7 +14,7 @@ def prep_syntax_coloring(zcode):
     absorb_entities([ (glo, glo.gtok) for glo in zcode.globals ], dupcheck=False)
     absorb_entities([ (obj, obj.objtok) for obj in zcode.objects ])
     absorb_entities([ (rtn, rtn.rtok) for rtn in zcode.routines ])
-    absorb_entities([ (con, con.ctok) for con in zcode.constants ])
+    absorb_entities([ (con, con.ctok) for con in zcode.constants ], dupcheck=False)
     for attr in zcode.attrnameset:
         if attr in implicitids:
             raise Exception('symbol clash: %s' % (attr,))

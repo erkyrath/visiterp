@@ -121,9 +121,13 @@ def teststaticcond(cgrp):
     if condgrp.typ is TokType.ID and condgrp.val == 'T':
         return resgrp
     if condgrp.matchform('GASSIGNED?', 1):
+        # This tests whether a symbol is globally assigned. To date,
+        # we only check PREDGEN this way, and it suffices to hardwire
+        # it "true". In the future we may need to be more clever.
         return resgrp
     if iseqzorknum(condgrp, 1):
         return resgrp
+    ### DEBUG false
     return None
     
 def iseqzorknum(condgrp, zorknum):
@@ -194,34 +198,32 @@ class Zcode:
                     if globtok.typ is TokType.GROUP and globtok.children:
                         if globtok.children[0].val in ('TABLE', 'LTABLE'):
                             self.findstringsintok(globtok)
-            if tok.matchform('CONSTANT', 2):
+            if tok.matchform('CONSTANT', 2) or tok.matchform('SETG', 2):
+                # SETG is for compile-time constants like ZORK-NUMBER and
+                # DEBUG. We'll put them in the regular constant table.
+                setg = (tok.children[0].val == 'SETG')
                 idtok = tok.children[1]
-                zconst = None
                 if idtok.typ is TokType.ID:
                     valtok = tok.children[2]
                     if valtok.typ is TokType.NUM:
                         constval = valtok.num
+                    elif valtok.typ is TokType.STR:
+                        if setg:
+                            # ZIL conventionally has a SETG constant
+                            # SIBREAKS which is a string. We're just gonna
+                            # handwave that.
+                            constval = 0
+                        else:
+                            raise Exception('Constant strings not supported: %s "%s"' % (idtok.val, valtok.val))
                     elif valtok.typ is TokType.GROUP and not valtok.children:
                         constval = 0
                     else:
-                        raise Exception('Constant has no value')
+                        raise Exception('Constant has no value: %s' % (idtok.val,))
                     zconst = ZConstant(idtok.val, constval, tok)
                     self.constants.append(zconst)
                     tok.defentity = zconst
                 else:
                     raise Exception('Constant has no name')
-            if tok.matchform('SETG', 2):
-                # We pretend ZORK-NUMBER is a regular CONSTANT.
-                idtok = tok.children[1]
-                if idtok.idmatch('ZORK-NUMBER'):
-                    valtok = tok.children[2]
-                    if valtok.typ is TokType.NUM:
-                        constval = valtok.num
-                    else:
-                        raise Exception('Constant has no value')
-                    zconst = ZConstant(idtok.val, constval, tok)
-                    self.constants.append(zconst)
-                    tok.defentity = zconst
             if tok.matchform('DIRECTIONS', 1):
                 if self.directions:
                     raise Exception('Directions encountered twice')
