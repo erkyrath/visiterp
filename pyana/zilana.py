@@ -173,8 +173,9 @@ def teststaticcond(cgrp, compileconstants):
 
 
 class Zcode:
-    def __init__(self, tokls):
+    def __init__(self, tokls, compileconstants={}):
         self.tokls = tokls
+        self.compileconstants = compileconstants
         self.globals = []
         self.constants = []
         self.strings = []

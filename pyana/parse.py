@@ -58,7 +58,7 @@ if opts.zilfile:
         stripifdefs(ls, compileconstants)
     if opts.dump:
         dumptokens(ls, withpos=False)
-    zcode = Zcode(ls)
+    zcode = Zcode(ls, compileconstants=compileconstants)
     zcode.build()
     strset = set([ val.text for val in zcode.strings ])
     print('globals:', len(zcode.globals))

@@ -4,11 +4,14 @@ from zillex import Lexer, TokType, dumptokens
 from zillex import posLE, posGT
 from zilana import teststaticcond, ZRoutine
 
+compileconstants = {}
 implicitids = set()
 linkids = {}
 loctoentity = {}
 
 def prep_syntax_coloring(zcode):
+    compileconstants.update(zcode.compileconstants)
+    
     # A global can be defined more than once (see LUCKY, WON-FLAG).
     # We just let one definition win.
     absorb_entities([ (glo, glo.gtok) for glo in zcode.globals ], dupcheck=False)
@@ -95,7 +98,7 @@ def colorize(tokls, res, defentity):
                     if found:
                         res.append( (cgrp, Color.IFNDEF) )
                         continue
-                    found = teststaticcond(cgrp)
+                    found = teststaticcond(cgrp, teststaticcond)
                     if found:
                         colorize([ cgrp ], res, defentity)
                     else:
