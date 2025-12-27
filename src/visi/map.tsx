@@ -5,6 +5,8 @@ import { gamedat_ids, gamedat_object_ids, gamedat_roominfo_names } from '../cust
 
 import { ReactCtx } from './context';
 
+type OptPosition = { x:number, y:number } | null;
+
 export function GameMap()
 {
     let scrollref = useRefDiv();
@@ -13,8 +15,8 @@ export function GameMap()
     let rctx = useContext(ReactCtx);
     let zstate = rctx.zstate;
 
-    let dragstart: {x:number, y:number}|null = null;
-    let scrollstart: {x:number, y:number}|null = null;
+    let dragstart: OptPosition = null;
+    let scrollstart: OptPosition = null;
 
     let origdocsize: { w:number, h:number } = gamedat_ids.MAP_DOCSIZE;
     let viewsize: { w:number, h:number } = gamedat_ids.MAP_VIEWSIZE;
@@ -60,7 +62,7 @@ export function GameMap()
                 herestr = hereobj.name;
             }
 
-            let herecen: { x:number, y:number }|null = null;
+            let herecen: OptPosition = null;
             let roomobj = gamedat_roominfo_names.get(herestr);
             if (roomobj) {
                 herecen = roomobj.center;
@@ -93,7 +95,7 @@ export function GameMap()
                         // We rely on the fact that the zstate reports
                         // objects in order (1-based).
                         let obj = zstate.objects[gamedat_ids.THIEF-1];
-                        let thiefcen: { x:number, y:number }|null = null;
+                        let thiefcen: OptPosition = null;
                         if (obj.parent) {
                             let thiefloc = gamedat_object_ids.get(obj.parent);
                             if (thiefloc) {
