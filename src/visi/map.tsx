@@ -89,29 +89,40 @@ export function GameMap()
                     mapdoc.rootElement.setAttribute('data-curselect', herestr);
                 }
 
-                if (true) {
-                    let el = mapdoc.getElementById('mob-thief');
-                    if (el) {
-                        // We rely on the fact that the zstate reports
-                        // objects in order (1-based).
-                        let obj = zstate.objects[gamedat_ids.THIEF-1];
-                        let thiefcen: OptPosition = null;
-                        if (obj.parent) {
-                            let thiefloc = gamedat_object_ids.get(obj.parent);
-                            if (thiefloc) {
-                                let throomobj = gamedat_roominfo_names.get(thiefloc.name);
-                                if (throomobj) {
-                                    thiefcen = throomobj.bottom;
-                                }
+                let mobiles = [ gamedat_ids.THIEF ];
+                let mobcount = 0;
+                for (let mobid of mobiles) {
+                    // We rely on the fact that the zstate reports
+                    // objects in order (1-based).
+                    let zobj = zstate.objects[mobid-1];
+                    if (!zobj)
+                        continue;
+                    let obj = gamedat_object_ids.get(mobid);
+                    if (!obj)
+                        continue;
+                    let el = mapdoc.getElementById('mob-'+obj.name.toLowerCase());
+                    if (!el)
+                        continue;
+                    
+                    let mobcen: OptPosition = null;
+                    if (zobj.parent) {
+                        let mobloc = gamedat_object_ids.get(zobj.parent);
+                        if (mobloc) {
+                            let throomobj = gamedat_roominfo_names.get(mobloc.name);
+                            if (throomobj) {
+                                mobcen = throomobj.bottom;
                             }
                         }
-                        if (thiefcen) {
-                            el.classList.remove('Offstage');
-                            el.setAttribute('transform', 'translate('+thiefcen.x+','+thiefcen.y+')');
-                        }
-                        else {
-                            el.classList.add('Offstage');
-                        }
+                    }
+                    if (mobcen) {
+                        let posx = mobcen.x;
+                        let posy = mobcen.y + 10*mobcount;
+                        el.classList.remove('Offstage');
+                        el.setAttribute('transform', 'translate('+posx+','+posy+')');
+                        mobcount++;
+                    }
+                    else {
+                        el.classList.add('Offstage');
                     }
                 }
             }
