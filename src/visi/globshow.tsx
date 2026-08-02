@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { unpack_address } from './gametypes';
-import { gamedat_object_ids, gamedat_string_map, gamedat_dictword_addrs, gamedat_actions, gamedat_property_nums, gamedat_grammar_verbnums, gamedat_grammar_line_addrs, gamedat_preposition_nums } from './gamedat';
+import { gamedat_object_ids, gamedat_string_map, gamedat_dictword_addrs, gamedat_dictword_adjs, gamedat_actions, gamedat_property_nums, gamedat_grammar_verbnums, gamedat_grammar_line_addrs, gamedat_preposition_nums } from './gamedat';
 
 import { ObjPageLink } from './widgets';
 
@@ -79,6 +79,21 @@ export function VarShowWord({ value }: { value:number })
     }
 
     return (<i>invalid word { value }</i>);
+}
+
+export function VarShowAdjective({ value }: { value:number })
+{
+    if (value == 0) {
+        return <i>no adjective</i>;
+    }
+    
+    let wd = gamedat_dictword_adjs.get(value);
+
+    if (wd) {
+        return (<span className="PrintDictWord">&#x2018;{ wd.text }&#x2019;</span>);
+    }
+
+    return (<i>invalid adj { value }</i>);
 }
 
 export function VarShowGrammarLine({ value }: { value:number })
