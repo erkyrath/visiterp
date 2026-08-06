@@ -923,13 +923,22 @@ input.SearchField {
     margin: 0px;
 }
 
-.SearchResultItem code {
-    font-family: "Courier Prime";
-    pointer-events: none
-}
 .SearchResultItem:hover {
     background-color: #CDF;
 }
 .DarkTheme .SearchResultItem:hover {
     background-color: #2828C0;
+}
+
+.SearchResultInner {
+    pointer-events: none;
+}
+
+.SearchResultItem code {
+    font-family: "Courier Prime";
+}
+.SearchResultItem .SearchResultType {
+    font-size: 85%;
+    font-style: italic;
+    margin-right: 8px;
 }

@@ -45,8 +45,16 @@ export function SearchResults()
     return (
         <div className="SearchResults">
             <ul>
-                <li className="SearchResultItem" onClick={ ()=>evhan_click('OBJ', 'SWORD') }>obj <code>SWORD</code></li>
-                <li className="SearchResultItem" onClick={ ()=>evhan_click('RTN', 'LANTERN') }>rtn <code>LANTERN</code></li>
+                <li className="SearchResultItem" onClick={ ()=>evhan_click('OBJ', 'SWORD') }>
+                    <span className="SearchResultInner">
+                        <span className="SearchResultType">obj</span> <code>SWORD</code>
+                    </span>
+                </li>
+                <li className="SearchResultItem" onClick={ ()=>evhan_click('RTN', 'LANTERN') }>
+                    <span className="SearchResultInner">
+                        <span className="SearchResultType">rtn</span> <code>LANTERN</code>
+                    </span>
+                </li>
             </ul>
         </div>
     );
