@@ -9,6 +9,7 @@ import { getasset } from './gamedat';
 
 import { ReactCtx } from './context';
 import { SourceLocState } from './context';
+import { SearchField } from './search';
 
 import { sourceloc_start } from '../custom/info';
 
@@ -113,6 +114,7 @@ export function SourceView()
                 <button className="NavButton" disabled={ atstart } onClick={ evhan_click_back }>&lt;</button>
                 <button className="NavButton" disabled={ atend } onClick={ evhan_click_forward }>&gt;</button>
                 <div className="TabLabel">{ filename }</div>
+                <SearchField />
             </div>
             <div className="TabContent">
                 <div id="scrollcontent_file" className="ScrollContent">

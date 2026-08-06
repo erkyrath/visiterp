@@ -850,3 +850,9 @@ a.Src_Implid:hover {
     text-decoration: underline;
     text-decoration-style: dashed;
 }
+
+.TabBar .SearchField {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
