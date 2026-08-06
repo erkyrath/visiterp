@@ -868,4 +868,15 @@ input.SearchField {
     margin-top: 2px;
     font-family: "Lato";
     font-size: 14px;
+
+    background-color: #F8F8F0;
+    color: black;
+    padding: 4px 8px;
+    border: 1px solid #888;
+    border-radius: 20px;
+}
+
+.DarkTheme input.SearchField {
+    background-color: #282810;
+    color: white;
 }
