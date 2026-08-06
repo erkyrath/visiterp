@@ -46,13 +46,15 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
     useEffect(() => {
         function evhan_change(visible: boolean) {
             console.log('### change visible', visible);
-            if (resultref.current) {
-                if (visible) {
+            if (visible) {
+                if (resultref.current) 
                     resultref.current.classList.add('Visible');
-                }
-                else {
-                    resultref.current.classList.remove('Visible');
-                }
+            }
+            else {
+                window.setTimeout(() => {
+                    if (resultref.current)
+                        resultref.current.classList.remove('Visible');
+                }, 150);                
             }
         }
         rock.callback = evhan_change;
