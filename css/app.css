@@ -851,8 +851,21 @@ a.Src_Implid:hover {
     text-decoration-style: dashed;
 }
 
-.TabBar .SearchField {
-    position: absolute;
-    right: 10px;
-    top: 5px;
+.SourceTabBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.SourceSearchBox {
+    max-width: 50%;
+    padding-right: 10px;
+}
+
+input.SearchField {
+    width: 100%;
+    margin-right: 10px;
+    margin-top: 2px;
+    font-family: "Lato";
+    font-size: 14px;
 }

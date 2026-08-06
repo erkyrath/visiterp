@@ -110,11 +110,15 @@ export function SourceView()
     
     return (
         <>
-            <div className="TabBar">
-                <button className="NavButton" disabled={ atstart } onClick={ evhan_click_back }>&lt;</button>
-                <button className="NavButton" disabled={ atend } onClick={ evhan_click_forward }>&gt;</button>
-                <div className="TabLabel">{ filename }</div>
-                <SearchField />
+            <div className="TabBar SourceTabBar">
+                <div>
+                    <button className="NavButton" disabled={ atstart } onClick={ evhan_click_back }>&lt;</button>
+                    <button className="NavButton" disabled={ atend } onClick={ evhan_click_forward }>&gt;</button>
+                    <div className="TabLabel">{ filename }</div>
+                </div>
+                <div className="SourceSearchBox">
+                    <SearchField />
+                </div>
             </div>
             <div className="TabContent">
                 <div id="scrollcontent_file" className="ScrollContent">
