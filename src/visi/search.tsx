@@ -1,20 +1,27 @@
 import React from 'react';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 import { find_sourceloc_for_id } from './gamedat';
 
 import { ReactCtx } from './context';
 
-export function SearchField()
+type SearchFieldCallback = (visible: boolean) => void;
+export type SearchFieldRock = {
+    callback: SearchFieldCallback | null;
+};
+
+export function SearchField({ change }:{ change:SearchFieldCallback })
 {
     let inputref = useRefInput();
 
     function evhan_focus() {
         console.log('### focus');
+        change(true);
     }
     
     function evhan_blur() {
         console.log('### blur');
+        change(false);
     }
     
     function evhan_change(ev: ChangeEv) {
@@ -31,9 +38,28 @@ export function SearchField()
     );
 }
 
-export function SearchResults()
+export function SearchResults({ rock }:{ rock:SearchFieldRock })
 {
     let rctx = useContext(ReactCtx);
+    let resultref = useRefDiv();
+
+    useEffect(() => {
+        function evhan_change(visible: boolean) {
+            console.log('### change visible', visible);
+            if (resultref.current) {
+                if (visible) {
+                    resultref.current.classList.add('Visible');
+                }
+                else {
+                    resultref.current.classList.remove('Visible');
+                }
+            }
+        }
+        rock.callback = evhan_change;
+        return () => {
+            rock.callback = null;
+        }
+    });
     
     function evhan_click(idtype: string, id: string) {
         let loc = find_sourceloc_for_id(idtype, id);
@@ -43,7 +69,7 @@ export function SearchResults()
     }
     
     return (
-        <div className="SearchResults">
+        <div className="SearchResults" ref={ resultref }>
             <ul>
                 <li className="SearchResultItem" onClick={ ()=>evhan_click('OBJ', 'SWORD') }>
                     <span className="SearchResultInner">
@@ -62,3 +88,4 @@ export function SearchResults()
 
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 const useRefInput = () => useRef<HTMLInputElement>(null);
+const useRefDiv = () => useRef<HTMLDivElement>(null);

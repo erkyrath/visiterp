@@ -9,7 +9,7 @@ import { getasset } from './gamedat';
 
 import { ReactCtx } from './context';
 import { SourceLocState } from './context';
-import { SearchField, SearchResults } from './search';
+import { SearchField, SearchResults, SearchFieldRock } from './search';
 
 import { sourceloc_start } from '../custom/info';
 
@@ -19,6 +19,8 @@ export function SourceView()
     
     let rctx = useContext(ReactCtx);
     let zstate = rctx.zstate;
+
+    let rock: SearchFieldRock = { callback: null };
 
     let atstart = (rctx.sourcelocpos == 0);
     let atend = (rctx.sourcelocpos == rctx.sourcelocs.length-1);
@@ -79,6 +81,11 @@ export function SourceView()
     function evhan_click_comment(topic: string) {
         rctx.showCommentary(topic);
     }
+
+    function evhan_search_visible(visible: boolean) {
+        if (rock.callback)
+            rock.callback(visible);
+    }
     
     useEffect(() => {
         if (noderef.current) {
@@ -117,14 +124,14 @@ export function SourceView()
                     <div className="TabLabel">{ filename }</div>
                 </div>
                 <div className="SourceSearchControl">
-                    <SearchField />
+                    <SearchField change={ evhan_search_visible } />
                 </div>
             </div>
             <div className="TabContent">
                 <div id="scrollcontent_file" className="ScrollContent">
                     <div className="SourceRef" ref={ noderef }></div>
                 </div>
-                <SearchResults />
+                <SearchResults rock={ rock } />
             </div>
         </>
     );
