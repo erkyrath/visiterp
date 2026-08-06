@@ -857,9 +857,24 @@ a.Src_Implid:hover {
     justify-content: space-between;
 }
 
-.SourceSearchBox {
+.SourceSearchControl {
     max-width: 50%;
-    padding-right: 10px;
+    padding-right: 16px;
+}
+
+.SearchBox {
+    position: relative;
+}
+
+.SearchBox .SearchIcon {
+    position: absolute;
+    pointer-events: none;
+    transform: rotate(-45deg);
+    top: 3px;
+    left: 8px;
+    color: #888;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 input.SearchField {
@@ -871,7 +886,7 @@ input.SearchField {
 
     background-color: #F8F8F0;
     color: black;
-    padding: 4px 8px;
+    padding: 4px 8px 4px 28px;
     border: 1px solid #888;
     border-radius: 20px;
 }

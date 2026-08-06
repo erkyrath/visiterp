@@ -116,7 +116,7 @@ export function SourceView()
                     <button className="NavButton" disabled={ atend } onClick={ evhan_click_forward }>&gt;</button>
                     <div className="TabLabel">{ filename }</div>
                 </div>
-                <div className="SourceSearchBox">
+                <div className="SourceSearchControl">
                     <SearchField />
                 </div>
             </div>
