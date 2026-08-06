@@ -9,7 +9,7 @@ import { getasset } from './gamedat';
 
 import { ReactCtx } from './context';
 import { SourceLocState } from './context';
-import { SearchField } from './search';
+import { SearchField, SearchResults } from './search';
 
 import { sourceloc_start } from '../custom/info';
 
@@ -124,6 +124,7 @@ export function SourceView()
                 <div id="scrollcontent_file" className="ScrollContent">
                     <div className="SourceRef" ref={ noderef }></div>
                 </div>
+                <SearchResults />
             </div>
         </>
     );

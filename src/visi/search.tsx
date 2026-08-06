@@ -27,5 +27,17 @@ export function SearchField()
     );
 }
 
+export function SearchResults()
+{
+    return (
+        <div className="SearchResults">
+            <ul>
+                <li className="SearchResultItem">obj LANTERN</li>
+                <li className="SearchResultItem">rtn LANTERN-F</li>
+            </ul>
+        </div>
+    );
+}
+
 type ChangeEv = React.ChangeEvent<HTMLInputElement>;
 const useRefInput = () => useRef<HTMLInputElement>(null);

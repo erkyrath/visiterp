@@ -895,3 +895,29 @@ input.SearchField {
     background-color: #282810;
     color: white;
 }
+
+.SearchResults {
+    position: absolute;
+    top: 32px;
+    right: 20px;
+    width: 40%;
+    background: #F8F8F0;
+    border: 1px solid black;
+    color: black;
+}
+
+.DarkTheme .SearchResults {
+    background-color: #282810;
+    color: white;
+}
+
+.SearchResults ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.SearchResultItem {
+    font-family: "Courier Prime";
+    font-size: 90%;
+}
