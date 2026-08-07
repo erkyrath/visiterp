@@ -9,7 +9,7 @@ import { getasset } from './gamedat';
 
 import { ReactCtx } from './context';
 import { SourceLocState } from './context';
-import { SearchField, SearchResults, SearchFieldRock } from './search';
+import { SearchField, SearchResults, SearchFieldRock } from './searchtool';
 
 import { sourceloc_start } from '../custom/info';
 

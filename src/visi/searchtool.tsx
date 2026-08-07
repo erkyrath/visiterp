@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef } from 'react';
 import { find_sourceloc_for_id } from './gamedat';
 
 import { ReactCtx } from './context';
+import { ResultItem } from './search';
 
 type SearchFieldCallback = (visible: boolean) => void;
 export type SearchFieldRock = {
