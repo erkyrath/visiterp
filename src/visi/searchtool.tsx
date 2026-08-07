@@ -1,10 +1,10 @@
 import React from 'react';
-import { useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 
 import { find_sourceloc_for_id } from './gamedat';
 
 import { ReactCtx } from './context';
-import { ResultItem } from './search';
+import { ResultItem, set_search_term } from './search';
 
 type SearchFieldCallback = (visible: boolean) => void;
 export type SearchFieldRock = {
@@ -28,6 +28,7 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
     function evhan_change(ev: ChangeEv) {
         if (inputref.current) {
             console.log('### change', inputref.current.value);
+            set_search_term(inputref.current.value);
         }
     }
     
@@ -41,6 +42,8 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
 
 export function SearchResults({ rock }:{ rock:SearchFieldRock })
 {
+    const [ resultList, setResultList ] = useState([] as ResultItem[]);
+    
     let rctx = useContext(ReactCtx);
     let resultref = useRefDiv();
 
@@ -64,6 +67,17 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         }
     });
     
+    useEffect(() => {
+        function evhan_list(ev: Event) {
+            let list: ResultItem[] = (ev as CustomEvent).detail;
+            setResultList(list);
+        };
+        window.addEventListener('search-results', evhan_list);
+        return () => {
+            window.removeEventListener('search-results', evhan_list);
+        };
+    });
+
     function evhan_click(idtype: string, id: string) {
         let loc = find_sourceloc_for_id(idtype, id);
         if (loc) {
