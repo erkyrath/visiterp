@@ -902,6 +902,10 @@ input.SearchField {
     top: 32px;
     right: 16px;
     width: 40%;
+    max-height: calc(100% - 80px);
+    overflow: clip;
+    overflow-y: scroll;
+    
     background: #F8F8F0;
     color: black;
 

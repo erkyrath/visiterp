@@ -36,6 +36,8 @@ function search_worker()
     if (current_term == '') {
         clearInterval(event_id);
         event_id = 0;
+        window.dispatchEvent(new CustomEvent('search-results', { detail:[] }));
+        return;
     }
 
     const winany = (window as any);

@@ -16,12 +16,10 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
     let inputref = useRefInput();
 
     function evhan_focus() {
-        console.log('### focus');
-        change(true);
+        change((inputref.current && inputref.current.value.length) ? true : false);
     }
     
     function evhan_blur() {
-        console.log('### blur');
         change(false);
     }
     
@@ -29,6 +27,7 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
         if (inputref.current) {
             console.log('### change', inputref.current.value);
             set_search_term(inputref.current.value);
+            change((inputref.current.value.length) ? true : false);
         }
     }
     
@@ -97,6 +96,9 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         <div className="SearchResults" ref={ resultref }>
             <ul>
                 { ells }
+                { ells.length == 0 && (
+                    <li><i>no results</i></li>
+                ) }
             </ul>
         </div>
     );
