@@ -904,7 +904,7 @@ input.SearchField {
     width: 40%;
     max-height: calc(100% - 80px);
     overflow: clip;
-    overflow-y: scroll;
+    overflow-y: auto;
     
     background: #F8F8F0;
     color: black;

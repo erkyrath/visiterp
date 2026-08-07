@@ -1,4 +1,4 @@
-import { RoutineData } from './gametypes';
+import { ObjectData, RoutineData } from './gametypes';
 
 export type ResultItem = {
     idtype: string;
@@ -42,8 +42,17 @@ function search_worker()
 
     const winany = (window as any);
 
+    const gamedat_objects: ObjectData[] = winany.gamedat_objects;
+    for (let obj of gamedat_objects) {
+        if (obj.name.indexOf(current_term) >= 0) {
+            results.push({ idtype:'obj', label:obj.name, sourceloc:obj.sourceloc });
+            
+            if (results.length >= MAX_RESULTS)
+                break;
+        }
+    }
+    
     const gamedat_routines: RoutineData[] = winany.gamedat_routines;
-
     if (results.length < MAX_RESULTS) {
         for (let obj of gamedat_routines) {
             if (obj.name.indexOf(current_term) >= 0) {
