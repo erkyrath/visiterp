@@ -1,9 +1,9 @@
 import { RoutineData } from './gametypes';
 
 export type ResultItem = {
-    typeid: string;
+    idtype: string;
     label: string;
-    loc: string;
+    sourceloc: string;
 };
 
 let current_term: string = '';
@@ -45,7 +45,7 @@ function search_worker()
     if (results.length < MAX_RESULTS) {
         for (let obj of gamedat_routines) {
             if (obj.name.indexOf(current_term) >= 0) {
-                results.push({ typeid:'rtn', label:obj.name, loc:obj.sourceloc });
+                results.push({ idtype:'rtn', label:obj.name, sourceloc:obj.sourceloc });
                 
                 if (results.length >= MAX_RESULTS)
                     break;

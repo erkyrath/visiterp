@@ -47,6 +47,17 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
     let rctx = useContext(ReactCtx);
     let resultref = useRefDiv();
 
+    let index = 0;
+    let ells = resultList.map((result) => {
+        return (
+            <li key={ index++ } className="SearchResultItem" onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
+                <span className="SearchResultInner">
+                    <span className="SearchResultType">{ result.idtype }</span> <code>{ result.label }</code>
+                </span>
+            </li>
+        );
+    });
+
     useEffect(() => {
         function evhan_change(visible: boolean) {
             console.log('### change visible', visible);
@@ -78,26 +89,14 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         };
     });
 
-    function evhan_click(idtype: string, id: string) {
-        let loc = find_sourceloc_for_id(idtype, id);
-        if (loc) {
-            rctx.setLoc(loc, (idtype == 'GLOB'));
-        }
+    function evhan_click(idtype: string, sourceloc: string) {
+        rctx.setLoc(sourceloc, (idtype == 'GLOB'));
     }
     
     return (
         <div className="SearchResults" ref={ resultref }>
             <ul>
-                <li className="SearchResultItem" onClick={ ()=>evhan_click('OBJ', 'SWORD') }>
-                    <span className="SearchResultInner">
-                        <span className="SearchResultType">obj</span> <code>SWORD</code>
-                    </span>
-                </li>
-                <li className="SearchResultItem" onClick={ ()=>evhan_click('RTN', 'LANTERN') }>
-                    <span className="SearchResultInner">
-                        <span className="SearchResultType">rtn</span> <code>LANTERN</code>
-                    </span>
-                </li>
+                { ells }
             </ul>
         </div>
     );
