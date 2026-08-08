@@ -82,9 +82,9 @@ export function SourceView()
         rctx.showCommentary(topic);
     }
 
-    function evhan_search_visible(visible: boolean) {
+    function evhan_search_visible(has_focus?: boolean, has_term?: boolean) {
         if (rock.callback)
-            rock.callback(visible);
+            rock.callback(has_focus, has_term);
     }
     
     useEffect(() => {
@@ -124,7 +124,7 @@ export function SourceView()
                     <div className="TabLabel">{ filename }</div>
                 </div>
                 <div className="SourceSearchControl">
-                    <SearchField change={ evhan_search_visible } />
+                    <SearchField updatefunc={ evhan_search_visible } />
                 </div>
             </div>
             <div className="TabContent">

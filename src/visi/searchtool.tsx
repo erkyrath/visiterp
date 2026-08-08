@@ -6,34 +6,32 @@ import { find_sourceloc_for_id } from './gamedat';
 import { ReactCtx } from './context';
 import { ResultItem, set_search_term } from './search';
 
-type SearchFieldCallback = (visible: boolean) => void;
+type SearchFieldCallback = (has_focus?: boolean, has_term?: boolean) => void;
 export type SearchFieldRock = {
     callback: SearchFieldCallback | null;
 };
 
-export function SearchField({ change }:{ change:SearchFieldCallback })
+export function SearchField({ updatefunc }:{ updatefunc:SearchFieldCallback })
 {
     let inputref = useRefInput();
 
-    function evhan_focus() {
-        change(true);
-    }
-    
-    function evhan_blur() {
-        change(false);
+    function evhan_focus(focus: boolean) {
+        let hasterm = ((inputref.current && inputref.current.value.length) ? true : false);
+        updatefunc(focus, hasterm);
     }
     
     function evhan_change(ev: ChangeEv) {
         if (inputref.current) {
             set_search_term(inputref.current.value);
-            change((inputref.current.value.length) ? true : false);
+            let hasterm = (inputref.current.value.length ? true : false);
+            updatefunc(undefined, hasterm);
         }
     }
     
     return (
         <div className="SearchBox">
             <div className="SearchIcon">&#x26B2;</div>
-            <input className="SearchField" type="search" ref={ inputref } onChange={ evhan_change } onFocus={ evhan_focus } onBlur={ evhan_blur } />
+            <input className="SearchField" type="search" ref={ inputref } onChange={ evhan_change } onFocus={ ()=>evhan_focus(true) } onBlur={ ()=>evhan_focus(false) } />
         </div>
     );
 }
@@ -41,6 +39,7 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
 export function SearchResults({ rock }:{ rock:SearchFieldRock })
 {
     const [ hasFocus, setHasFocus ] = useState(false);
+    const [ hasTerm, setHasTerm ] = useState(false);
     const [ resultList, setResultList ] = useState([] as ResultItem[]);
     
     let rctx = useContext(ReactCtx);
@@ -58,14 +57,19 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
     });
 
     useEffect(() => {
-        function evhan_change(visible: boolean) {
-            if (visible) {
-                setHasFocus(true);
+        function evhan_change(has_focus?: boolean, has_term?: boolean) {
+            if (has_focus !== undefined) {
+                if (has_focus) {
+                    setHasFocus(true);
+                }
+                else {
+                    window.setTimeout(() => {
+                        setHasFocus(false);
+                    }, 150);                
+                }
             }
-            else {
-                window.setTimeout(() => {
-                    setHasFocus(false);
-                }, 150);                
+            if (has_term !== undefined) {
+                setHasTerm(has_term);
             }
         }
         rock.callback = evhan_change;
@@ -89,7 +93,7 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         rctx.setLoc(sourceloc, (idtype == 'GLOB'));
     }
     
-    if (!(hasFocus && resultList.length)) {
+    if (!(hasFocus && hasTerm)) {
         return null;
     }
 
