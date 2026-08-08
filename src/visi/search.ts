@@ -20,7 +20,7 @@ let stage = 0;
 let timer_id = 0;
 
 const MAX_RESULTS = 20;
-const MAX_LENGTH = 60;
+const MAX_LENGTH = 80;
 
 export function set_search_term(val: string)
 {
@@ -61,18 +61,15 @@ function search_worker()
     
     switch (stage) {
     case 0:
-        newres = search_exact(freespace);
+        newres = search_basics(freespace);
         break;
     case 1:
-        newres = search_objects_globals(freespace);
-        break;
-    case 2:
         newres = search_routines(freespace);
         break;
-    case 3:
+    case 2:
         newres = search_constants(freespace);
         break;
-    case 4:
+    case 3:
         newres = search_strings(freespace);
         break;
     default:
@@ -109,10 +106,10 @@ function search_worker()
     }
 }
 
-function search_exact(freespace: number): ResultItem[]
+function search_basics(freespace: number): ResultItem[]
 {
     let res = [];
-
+    
     let obj = gamedat_object_names.get(current_term);
     if (obj) {
         res.push({ idtype:'obj', label:obj.name, sourceloc:obj.sourceloc });
@@ -133,12 +130,8 @@ function search_exact(freespace: number): ResultItem[]
         res.push({ idtype:'const', label:con.name, sourceloc:con.sourceloc });
     }
 
-    return res;
-}
-
-function search_objects_globals(freespace: number): ResultItem[]
-{
-    let res = [];
+    if (res.length >= freespace)
+        return res;
     
     const winany = (window as any);
 
