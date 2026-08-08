@@ -219,12 +219,12 @@ function search_strings(freespace: number): ResultItem[]
         if (pos >= 0) {
             let label = str.text;
             if (label.length > MAX_LENGTH && pos > 16) {
-                let cutat = 16;
-                if (cutat > label.length - MAX_LENGTH) {
-                    cutat = label.length - MAX_LENGTH;
+                let cutat = pos-16;
+                if (cutat > label.length - MAX_LENGTH + 1) {
+                    cutat = label.length - MAX_LENGTH + 1;
                 }
-                label = '\u2026' + label.slice(pos-cutat);
-                pos -= ((pos-cutat)-1);
+                label = '\u2026' + label.slice(cutat);
+                pos -= (cutat-1);
             }
             if (label.length > MAX_LENGTH) {
                 label = label.slice(0, MAX_LENGTH) + '\u2026';
