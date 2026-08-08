@@ -48,21 +48,8 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
 
     let index = 0;
     let ells = resultList.map((result) => {
-        let hasloc = result.sourceloc && result.sourceloc.length;
-        let cla = hasloc ? "SearchResultItem Location" : "SearchResultItem NoLocation";
         return (
-            <li key={ index++ } className={ cla } onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
-                <span className="SearchResultInner">
-                    { (result.idtype == 'str') ?
-                      <span className="SearchResultString">{ result.label }</span>
-                      :
-                      <>
-                          <span className="SearchResultType">{ result.idtype }</span>
-                          <code>{ result.label }</code>
-                      </>
-                    }
-                </span>
-            </li>
+            <OneSearchResult key={ index++ } result={ result } />
         );
     });
 
@@ -102,10 +89,6 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         };
     });
 
-    function evhan_click(idtype: string, sourceloc: string) {
-        rctx.setLoc(sourceloc, (idtype == 'GLOB'));
-    }
-    
     if (!(hasFocus && hasTerm && resultArrived)) {
         return null;
     }
@@ -119,6 +102,33 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
                 ) }
             </ul>
         </div>
+    );
+}
+
+function OneSearchResult({ result }: {result:ResultItem })
+{
+    let rctx = useContext(ReactCtx);
+    
+    let hasloc = result.sourceloc && result.sourceloc.length;
+    let cla = hasloc ? "SearchResultItem Location" : "SearchResultItem NoLocation";
+
+    function evhan_click(idtype: string, sourceloc: string) {
+        rctx.setLoc(sourceloc, (idtype == 'GLOB'));
+    }
+    
+    return (
+        <li className={ cla } onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
+            <span className="SearchResultInner">
+                { (result.idtype == 'str') ?
+                  <span className="SearchResultString">{ result.label }</span>
+                  :
+                  <>
+                      <span className="SearchResultType">{ result.idtype }</span>
+                      <code>{ result.label }</code>
+                  </>
+                }
+            </span>
+        </li>
     );
 }
 
