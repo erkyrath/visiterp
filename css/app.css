@@ -927,6 +927,10 @@ input.SearchField {
     margin: 0px;
 }
 
+.SearchResultItem {
+    overflow: clip;
+}
+
 .SearchResultItem.Location:hover {
     background-color: #CDF;
 }
@@ -949,4 +953,8 @@ input.SearchField {
     font-size: 85%;
     font-style: italic;
     margin-right: 8px;
+}
+
+.SearchResultString {
+    text-wrap-mode: nowrap;
 }
