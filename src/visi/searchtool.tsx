@@ -4,7 +4,7 @@ import { useState, useContext, useEffect, useRef } from 'react';
 import { find_sourceloc_for_id } from './gamedat';
 
 import { ReactCtx } from './context';
-import { ResultItem, set_search_term } from './search';
+import { ResultItem, SearchEventDetail, set_search_term } from './search';
 
 type SearchFieldCallback = (has_focus?: boolean, has_term?: boolean) => void;
 export type SearchFieldRock = {
@@ -42,6 +42,7 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
     const [ hasTerm, setHasTerm ] = useState(false);
     const [ resultArrived, setResultArrived ] = useState(false);
     const [ resultList, setResultList ] = useState([] as ResultItem[]);
+    const [ resultHasMore, setResultHasMore ] = useState(false);
     
     let rctx = useContext(ReactCtx);
     let resultref = useRefDiv();
@@ -79,8 +80,9 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
     
     useEffect(() => {
         function evhan_list(ev: Event) {
-            let list: ResultItem[] = (ev as CustomEvent).detail;
-            setResultList(list);
+            let detail: SearchEventDetail = (ev as CustomEvent).detail;
+            setResultList(detail.results);
+            setResultHasMore(detail.more);
             setResultArrived(true);
         };
         window.addEventListener('search-results', evhan_list);

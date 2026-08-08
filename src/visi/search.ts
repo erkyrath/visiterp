@@ -1,6 +1,11 @@
 import { ObjectData, RoutineData, GlobalData, ConstantData } from './gametypes';
 import { gamedat_object_names, gamedat_global_names, gamedat_constant_names, gamedat_routine_names } from './gamedat';
 
+export type SearchEventDetail = {
+    results: ResultItem[];
+    more: boolean;
+};
+
 export type ResultItem = {
     idtype: string;
     label: string;
@@ -79,7 +84,8 @@ function search_worker()
 
         if (!results.length) {
             // We never sent any intermediate results, so supply final closure.
-            window.dispatchEvent(new CustomEvent('search-results', { detail:[] }));
+            let detail: SearchEventDetail = { results: [], more: false };
+            window.dispatchEvent(new CustomEvent('search-results', { detail:detail }));
         }
         
         return;
@@ -96,7 +102,8 @@ function search_worker()
         results = [ ...results, ...newres ];
     
         console.log('### dispatching', results.length);
-        window.dispatchEvent(new CustomEvent('search-results', { detail:[ ...results ] }));
+        let detail: SearchEventDetail = { results: [ ...results ], more: (results.length >= MAX_RESULTS) };
+        window.dispatchEvent(new CustomEvent('search-results', { detail:detail }));
     }
 }
 
