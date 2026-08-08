@@ -70,6 +70,12 @@ function search_worker()
     if (finished) {
         clearInterval(timer_id);
         timer_id = 0;
+
+        if (!results.length) {
+            // We never sent any intermediate results, so supply final closure.
+            window.dispatchEvent(new CustomEvent('search-results', { detail:[] }));
+        }
+        
         return;
     }
 
@@ -80,6 +86,7 @@ function search_worker()
     }
 
     if (newres.length) {
+        // We only send results if new ones have been found.
         results = [ ...results, ...newres ];
     
         console.log('### dispatching', results.length);
