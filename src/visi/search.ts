@@ -55,6 +55,9 @@ function search_worker()
     case 0:
         newres = search_objects_globals(freespace);
         break;
+    case 1:
+        newres = search_routines(freespace);
+        break;
     default:
         finished = true;
         break;
@@ -108,7 +111,7 @@ function search_objects_globals(freespace: number): ResultItem[]
     return res;
 }
 
-function search_routines(): ResultItem[]
+function search_routines(freespace: number): ResultItem[]
 {
     let res = [];
     
@@ -116,6 +119,9 @@ function search_routines(): ResultItem[]
 
     const gamedat_routines: RoutineData[] = winany.gamedat_routines;
     for (let obj of gamedat_routines) {
+        if (res.length >= freespace)
+            break;
+        
         if (obj.name.indexOf(current_term) >= 0) {
             res.push({ idtype:'rtn', label:obj.name, sourceloc:obj.sourceloc });
             
