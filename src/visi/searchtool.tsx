@@ -53,8 +53,14 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         return (
             <li key={ index++ } className={ cla } onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
                 <span className="SearchResultInner">
-                    <span className="SearchResultType">{ result.idtype }</span>
-                    <code>{ result.label }</code>
+                    { (result.idtype == 'str') ?
+                      <span className="SearchResultString">{ result.label }</span>
+                      :
+                      <>
+                          <span className="SearchResultType">{ result.idtype }</span>
+                          <code>{ result.label }</code>
+                      </>
+                    }
                 </span>
             </li>
         );

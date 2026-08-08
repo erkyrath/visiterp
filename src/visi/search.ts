@@ -198,7 +198,7 @@ function search_strings(freespace: number): ResultItem[]
     if (upstrings == null) {
         const winany = (window as any);
         const gamedat_strings: any[] = winany.gamedat_strings;
-        upstrings = gamedat_strings.map((obj) => ({ text: obj[1],  uptext: obj[1].toUpperCase(), sourceloc: obj[2] }))
+        upstrings = gamedat_strings.map((obj) => ({ text: obj[1],  uptext: obj[1].toUpperCase(), sourceloc: obj[2] }));
     }
     
     let res = [];
