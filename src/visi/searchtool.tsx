@@ -16,7 +16,7 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
     let inputref = useRefInput();
 
     function evhan_focus() {
-        change((inputref.current && inputref.current.value.length) ? true : false);
+        change(true);
     }
     
     function evhan_blur() {
@@ -25,7 +25,6 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
     
     function evhan_change(ev: ChangeEv) {
         if (inputref.current) {
-            console.log('### change', inputref.current.value);
             set_search_term(inputref.current.value);
             change((inputref.current.value.length) ? true : false);
         }
@@ -41,6 +40,7 @@ export function SearchField({ change }:{ change:SearchFieldCallback })
 
 export function SearchResults({ rock }:{ rock:SearchFieldRock })
 {
+    const [ hasFocus, setHasFocus ] = useState(false);
     const [ resultList, setResultList ] = useState([] as ResultItem[]);
     
     let rctx = useContext(ReactCtx);
@@ -59,15 +59,12 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
 
     useEffect(() => {
         function evhan_change(visible: boolean) {
-            console.log('### change visible', visible);
             if (visible) {
-                if (resultref.current) 
-                    resultref.current.classList.add('Visible');
+                setHasFocus(true);
             }
             else {
                 window.setTimeout(() => {
-                    if (resultref.current)
-                        resultref.current.classList.remove('Visible');
+                    setHasFocus(false);
                 }, 150);                
             }
         }
@@ -92,6 +89,10 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         rctx.setLoc(sourceloc, (idtype == 'GLOB'));
     }
     
+    if (!(hasFocus && resultList.length)) {
+        return null;
+    }
+
     return (
         <div className="SearchResults" ref={ resultref }>
             <ul>

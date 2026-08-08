@@ -898,7 +898,6 @@ input.SearchField {
 
 .SearchResults {
     position: absolute;
-    display: none;
     top: 32px;
     right: 16px;
     width: 40%;
@@ -914,9 +913,6 @@ input.SearchField {
     padding: 12px 16px;
 
     box-shadow: 0px 2px 4px 2px #0004, -4px 4px 4px 2px #FFF;
-}
-.SearchResults.Visible {
-    display: block;
 }
 
 .DarkTheme .SearchResults {
