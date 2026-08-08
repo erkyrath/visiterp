@@ -20,6 +20,7 @@ let stage = 0;
 let timer_id = 0;
 
 const MAX_RESULTS = 20;
+const MAX_LENGTH = 60;
 
 export function set_search_term(val: string)
 {
@@ -217,12 +218,16 @@ function search_strings(freespace: number): ResultItem[]
         let pos = str.uptext.indexOf(current_term);
         if (pos >= 0) {
             let label = str.text;
-            if (pos > 16) {
-                label = '\u2026' + label.slice(pos-16);
-                pos = 17;
+            if (label.length > MAX_LENGTH && pos > 16) {
+                let cutat = 16;
+                if (cutat > label.length - MAX_LENGTH) {
+                    cutat = label.length - MAX_LENGTH;
+                }
+                label = '\u2026' + label.slice(pos-cutat);
+                pos -= ((pos-cutat)-1);
             }
-            if (label.length > 60) {
-                label = label.slice(0, 60) + '\u2026';
+            if (label.length > MAX_LENGTH) {
+                label = label.slice(0, MAX_LENGTH) + '\u2026';
             }
             let span = { pos:pos, len:current_term.length };
             res.push({ idtype:'str', label:label, span:span, sourceloc:str.sourceloc });
