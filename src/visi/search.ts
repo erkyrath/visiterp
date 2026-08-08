@@ -1,5 +1,5 @@
-import { ObjectData, RoutineData } from './gametypes';
-import { gamedat_object_names, gamedat_global_names, gamedat_routine_names } from './gamedat';
+import { ObjectData, RoutineData, GlobalData, ConstantData } from './gametypes';
+import { gamedat_object_names, gamedat_global_names, gamedat_constant_names, gamedat_routine_names } from './gamedat';
 
 export type ResultItem = {
     idtype: string;
@@ -31,7 +31,7 @@ export function set_search_term(val: string)
         timer_id = 0;
     }
 
-    timer_id = setInterval(search_worker, 500) as unknown as number;
+    timer_id = setInterval(search_worker, 100) as unknown as number;
 }
 
 function search_worker()
@@ -61,6 +61,9 @@ function search_worker()
         break;
     case 2:
         newres = search_routines(freespace);
+        break;
+    case 3:
+        newres = search_constants(freespace);
         break;
     default:
         finished = true;
@@ -113,6 +116,11 @@ function search_exact(freespace: number): ResultItem[]
         res.push({ idtype:'rtn', label:rtn.name, sourceloc:rtn.sourceloc });
     }
 
+    let con = gamedat_constant_names.get(current_term);
+    if (con) {
+        res.push({ idtype:'const', label:con.name, sourceloc:con.sourceloc });
+    }
+
     return res;
 }
 
@@ -132,7 +140,7 @@ function search_objects_globals(freespace: number): ResultItem[]
     if (res.length >= freespace)
         return res;
     
-    const gamedat_globals: ObjectData[] = winany.gamedat_globals;
+    const gamedat_globals: GlobalData[] = winany.gamedat_globals;
     for (let glob of gamedat_globals) {
         if (glob.name.indexOf(current_term) >= 0 && glob.name != current_term) {
             res.push({ idtype:'glob', label:glob.name, sourceloc:glob.sourceloc });
@@ -155,6 +163,25 @@ function search_routines(freespace: number): ResultItem[]
         
         if (rtn.name.indexOf(current_term) >= 0 && rtn.name != current_term) {
             res.push({ idtype:'rtn', label:rtn.name, sourceloc:rtn.sourceloc });
+        }
+    }
+    
+    return res;
+}
+
+function search_constants(freespace: number): ResultItem[]
+{
+    let res = [];
+    
+    const winany = (window as any);
+
+    const gamedat_constants: ConstantData[] = winany.gamedat_constants;
+    for (let con of gamedat_constants) {
+        if (res.length >= freespace)
+            break;
+        
+        if (con.name.indexOf(current_term) >= 0 && con.name != current_term) {
+            res.push({ idtype:'const', label:con.name, sourceloc:con.sourceloc });
         }
     }
     
