@@ -47,7 +47,7 @@ function search_worker()
     let newres: ResultItem[] = [];
 
     let freespace = MAX_RESULTS - results.length;
-    if (freespace < 0) {
+    if (freespace <= 0) {
         stage = -1;
         finished = true;
     }
