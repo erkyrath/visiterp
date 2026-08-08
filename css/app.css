@@ -947,6 +947,7 @@ input.SearchField {
 
 .SearchResultItem code {
     font-family: "Courier Prime";
+    font-size: 90%;
 }
 .SearchResultItem .SearchResultType {
     float: right;
@@ -957,4 +958,5 @@ input.SearchField {
 
 .SearchResultString {
     text-wrap-mode: nowrap;
+    font-size: 90%;
 }

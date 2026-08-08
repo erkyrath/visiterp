@@ -205,9 +205,15 @@ function search_strings(freespace: number): ResultItem[]
     for (let str of upstrings) {
         if (res.length >= freespace)
             break;
-        
-        if (str.uptext.indexOf(current_term) >= 0) {
-            res.push({ idtype:'str', label:str.text, sourceloc:str.sourceloc });
+
+        let pos = str.uptext.indexOf(current_term);
+        if (pos >= 0) {
+            let label = str.text;
+            if (pos > 16)
+                label = '\u2026' + label.slice(pos-16);
+            if (label.length > 80)
+                label = label.slice(0, 80) + '\u2026';
+            res.push({ idtype:'str', label:label, sourceloc:str.sourceloc });
         }
     }
 
