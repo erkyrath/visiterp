@@ -43,7 +43,6 @@ export function set_search_term(val: string)
 
 function search_worker()
 {
-    console.log('### search_worker');
     if (current_term == '') {
         clearInterval(timer_id);
         timer_id = 0;
@@ -100,7 +99,6 @@ function search_worker()
         // We only send results if new ones have been found.
         results = [ ...results, ...newres ];
     
-        console.log('### dispatching', results.length);
         let detail: SearchEventDetail = { results: [ ...results ], more: (results.length >= MAX_RESULTS) };
         window.dispatchEvent(new CustomEvent('search-results', { detail:detail }));
     }
