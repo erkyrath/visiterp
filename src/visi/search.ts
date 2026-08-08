@@ -221,7 +221,10 @@ function search_strings(freespace: number): ResultItem[]
                 label = label.slice(0, MAX_LENGTH) + '\u2026';
             }
             let span = { pos:pos, len:current_term.length };
-            res.push({ idtype:'str', label:label, span:span, sourceloc:str.sourceloc });
+            let sourceloc = str.sourceloc;
+            if (typeof sourceloc !== 'string')
+                sourceloc = sourceloc[0];  //### cache and increment?
+            res.push({ idtype:'str', label:label, span:span, sourceloc:sourceloc });
         }
     }
 
