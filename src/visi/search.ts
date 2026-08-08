@@ -106,7 +106,7 @@ function search_worker()
 
 function search_basics(freespace: number): ResultItem[]
 {
-    let res = [];
+    let res: ResultItem[] = [];
     
     let obj = gamedat_object_names.get(current_term);
     if (obj) {
@@ -155,7 +155,7 @@ function search_basics(freespace: number): ResultItem[]
 
 function search_routines(freespace: number): ResultItem[]
 {
-    let res = [];
+    let res: ResultItem[] = [];
     
     const winany = (window as any);
 
@@ -201,7 +201,7 @@ function search_strings(freespace: number): ResultItem[]
         upstrings = gamedat_strings.map((obj) => ({ text: obj[1],  uptext: obj[1].toUpperCase(), sourceloc: obj[2] }));
     }
     
-    let res = [];
+    let res: ResultItem[] = [];
     for (let str of upstrings) {
         if (res.length >= freespace)
             break;
