@@ -40,6 +40,7 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
 {
     const [ hasFocus, setHasFocus ] = useState(false);
     const [ hasTerm, setHasTerm ] = useState(false);
+    const [ resultArrived, setResultArrived ] = useState(false);
     const [ resultList, setResultList ] = useState([] as ResultItem[]);
     
     let rctx = useContext(ReactCtx);
@@ -70,6 +71,8 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
             }
             if (has_term !== undefined) {
                 setHasTerm(has_term);
+                if (!has_term)
+                    setResultArrived(false);
             }
         }
         rock.callback = evhan_change;
@@ -82,6 +85,7 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         function evhan_list(ev: Event) {
             let list: ResultItem[] = (ev as CustomEvent).detail;
             setResultList(list);
+            setResultArrived(true);
         };
         window.addEventListener('search-results', evhan_list);
         return () => {
@@ -93,7 +97,7 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         rctx.setLoc(sourceloc, (idtype == 'GLOB'));
     }
     
-    if (!(hasFocus && hasTerm)) {
+    if (!(hasFocus && resultArrived)) {
         return null;
     }
 
