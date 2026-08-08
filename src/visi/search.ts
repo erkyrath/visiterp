@@ -65,6 +65,9 @@ function search_worker()
     case 3:
         newres = search_constants(freespace);
         break;
+    case 4:
+        newres = search_strings(freespace);
+        break;
     default:
         finished = true;
         break;
@@ -185,5 +188,28 @@ function search_constants(freespace: number): ResultItem[]
         }
     }
     
+    return res;
+}
+
+let upstrings: { text:string, uptext:string, sourceloc:string }[] | null = null;
+
+function search_strings(freespace: number): ResultItem[]
+{
+    if (upstrings == null) {
+        const winany = (window as any);
+        const gamedat_strings: any[] = winany.gamedat_strings;
+        upstrings = gamedat_strings.map((obj) => ({ text: obj[1],  uptext: obj[1].toUpperCase(), sourceloc: obj[2] }))
+    }
+    
+    let res = [];
+    for (let str of upstrings) {
+        if (res.length >= freespace)
+            break;
+        
+        if (str.uptext.indexOf(current_term) >= 0) {
+            res.push({ idtype:'str', label:str.text, sourceloc:str.sourceloc });
+        }
+    }
+
     return res;
 }
