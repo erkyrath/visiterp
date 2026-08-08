@@ -929,6 +929,7 @@ input.SearchField {
 
 .SearchResultItem {
     overflow: clip;
+    text-indent: 10px hanging;
 }
 
 .SearchResultItem.Location:hover {
@@ -957,6 +958,5 @@ input.SearchField {
 }
 
 .SearchResultString {
-    text-wrap-mode: nowrap;
     font-size: 90%;
 }

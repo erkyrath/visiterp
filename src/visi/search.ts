@@ -212,7 +212,7 @@ function search_strings(freespace: number): ResultItem[]
             if (pos > 16)
                 label = '\u2026' + label.slice(pos-16);
             if (label.length > 80)
-                label = label.slice(0, 80) + '\u2026';
+                label = label.slice(0, 40) + '\u2026';
             res.push({ idtype:'str', label:label, sourceloc:str.sourceloc });
         }
     }
