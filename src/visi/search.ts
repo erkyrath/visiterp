@@ -1,4 +1,5 @@
 import { ObjectData, RoutineData } from './gametypes';
+import { gamedat_object_names, gamedat_global_names, gamedat_routine_names } from './gamedat';
 
 export type ResultItem = {
     idtype: string;
@@ -53,9 +54,12 @@ function search_worker()
     
     switch (stage) {
     case 0:
-        newres = search_objects_globals(freespace);
+        newres = search_exact(freespace);
         break;
     case 1:
+        newres = search_objects_globals(freespace);
+        break;
+    case 2:
         newres = search_routines(freespace);
         break;
     default:
@@ -83,6 +87,28 @@ function search_worker()
     }
 }
 
+function search_exact(freespace: number): ResultItem[]
+{
+    let res = [];
+
+    let obj = gamedat_object_names.get(current_term);
+    if (obj) {
+        res.push({ idtype:'obj', label:obj.name, sourceloc:obj.sourceloc });
+    }
+
+    let glob = gamedat_global_names.get(current_term);
+    if (glob) {
+        res.push({ idtype:'glob', label:glob.name, sourceloc:glob.sourceloc });
+    }
+
+    let rtn = gamedat_routine_names.get(current_term);
+    if (rtn) {
+        res.push({ idtype:'rtn', label:rtn.name, sourceloc:rtn.sourceloc });
+    }
+
+    return res;
+}
+
 function search_objects_globals(freespace: number): ResultItem[]
 {
     let res = [];
@@ -91,9 +117,8 @@ function search_objects_globals(freespace: number): ResultItem[]
 
     const gamedat_objects: ObjectData[] = winany.gamedat_objects;
     for (let obj of gamedat_objects) {
-        if (obj.name.indexOf(current_term) >= 0) {
+        if (obj.name.indexOf(current_term) >= 0 && obj.name != current_term) {
             res.push({ idtype:'obj', label:obj.name, sourceloc:obj.sourceloc });
-            
         }
     }
 
@@ -101,10 +126,9 @@ function search_objects_globals(freespace: number): ResultItem[]
         return res;
     
     const gamedat_globals: ObjectData[] = winany.gamedat_globals;
-    for (let obj of gamedat_globals) {
-        if (obj.name.indexOf(current_term) >= 0) {
-            res.push({ idtype:'glob', label:obj.name, sourceloc:obj.sourceloc });
-            
+    for (let glob of gamedat_globals) {
+        if (glob.name.indexOf(current_term) >= 0 && glob.name != current_term) {
+            res.push({ idtype:'glob', label:glob.name, sourceloc:glob.sourceloc });
         }
     }
 
@@ -118,13 +142,12 @@ function search_routines(freespace: number): ResultItem[]
     const winany = (window as any);
 
     const gamedat_routines: RoutineData[] = winany.gamedat_routines;
-    for (let obj of gamedat_routines) {
+    for (let rtn of gamedat_routines) {
         if (res.length >= freespace)
             break;
         
-        if (obj.name.indexOf(current_term) >= 0) {
-            res.push({ idtype:'rtn', label:obj.name, sourceloc:obj.sourceloc });
-            
+        if (rtn.name.indexOf(current_term) >= 0 && rtn.name != current_term) {
+            res.push({ idtype:'rtn', label:rtn.name, sourceloc:rtn.sourceloc });
         }
     }
     
