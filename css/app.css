@@ -927,11 +927,14 @@ input.SearchField {
     margin: 0px;
 }
 
-.SearchResultItem:hover {
+.SearchResultItem.Location:hover {
     background-color: #CDF;
 }
-.DarkTheme .SearchResultItem:hover {
+.DarkTheme .SearchResultItem.Location:hover {
     background-color: #2828C0;
+}
+.SearchResultItem.NoLocation {
+    color: #888;
 }
 
 .SearchResultInner {

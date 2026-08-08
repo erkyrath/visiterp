@@ -48,8 +48,9 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
 
     let index = 0;
     let ells = resultList.map((result) => {
+        let hasloc = result.sourceloc && result.sourceloc.length;
         return (
-            <li key={ index++ } className="SearchResultItem" onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
+            <li key={ index++ } className={ hasloc ? "SearchResultItem Location" : "SearchResultItem NoLocation" } onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
                 <span className="SearchResultInner">
                     <span className="SearchResultType">{ result.idtype }</span> <code>{ result.label }</code>
                 </span>
