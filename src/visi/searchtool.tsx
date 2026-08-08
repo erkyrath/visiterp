@@ -114,6 +114,21 @@ function OneSearchResult({ result }: {result:ResultItem })
     let hasloc = result.sourceloc && result.sourceloc.length;
     let cla = hasloc ? "SearchResultItem Location" : "SearchResultItem NoLocation";
 
+    let spanel;
+    if (result.span) {
+        let pre = result.label.slice(0, result.span.pos);
+        let mid = result.label.slice(result.span.pos, result.span.pos+result.span.len);
+        let post = result.label.slice(result.span.pos+result.span.len);
+        spanel = (
+            <span>{ pre }<b>{ mid }</b>{ post }</span>
+        );
+    }
+    else {
+        spanel = (
+            <span>{ result.label }</span>
+        );
+    }
+    
     function evhan_click(idtype: string, sourceloc: string) {
         rctx.setLoc(sourceloc, (idtype == 'GLOB'));
     }
@@ -122,11 +137,11 @@ function OneSearchResult({ result }: {result:ResultItem })
         <li className={ cla } onClick={ ()=>evhan_click(result.idtype, result.sourceloc) }>
             <span className="SearchResultInner">
                 { (result.idtype == 'str') ?
-                  <span className="SearchResultString">{ result.label }</span>
+                  <span className="SearchResultString">{ spanel }</span>
                   :
                   <>
                       <span className="SearchResultType">{ result.idtype }</span>
-                      <code>{ result.label }</code>
+                      <code>{ spanel }</code>
                   </>
                 }
             </span>
