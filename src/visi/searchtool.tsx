@@ -97,7 +97,7 @@ export function SearchResults({ rock }:{ rock:SearchFieldRock })
         rctx.setLoc(sourceloc, (idtype == 'GLOB'));
     }
     
-    if (!(hasFocus && resultArrived)) {
+    if (!(hasFocus && hasTerm && resultArrived)) {
         return null;
     }
 
