@@ -191,14 +191,50 @@ function search_constants(freespace: number): ResultItem[]
     return res;
 }
 
-let upstrings: { text:string, uptext:string, sourceloc:string }[] | null = null;
+type UpStringData = {
+    text: string;
+    uptext: string;
+    sourceloc: string;
+};
+
+let upstrings: UpStringData[] | null = null;
+
+function build_upstring_cache(): UpStringData[]
+{
+    const winany = (window as any);
+    const gamedat_strings: any[] = winany.gamedat_strings;
+    
+    let res: UpStringData[] = [];
+
+    let gotset: Set<string> = new Set();
+    
+    for (let str of gamedat_strings) {
+	let text: string = str[1];
+	if (gotset.has(text))
+	    continue;
+
+	gotset.add(text);
+	
+	let uptext = text.toUpperCase();
+	let sourceloc: string|string[] = str[2];
+
+	if (typeof sourceloc === 'string') {
+	    res.push({ text:text, uptext:uptext, sourceloc:sourceloc });
+	}
+	else {
+	    for (let loc of sourceloc) {
+		res.push({ text:text, uptext:uptext, sourceloc:loc });
+	    }
+	}
+    }
+
+    return res;
+}
 
 function search_strings(freespace: number): ResultItem[]
 {
     if (upstrings == null) {
-        const winany = (window as any);
-        const gamedat_strings: any[] = winany.gamedat_strings;
-        upstrings = gamedat_strings.map((obj) => ({ text: obj[1],  uptext: obj[1].toUpperCase(), sourceloc: obj[2] }));
+        upstrings = build_upstring_cache();
     }
     
     let res: ResultItem[] = [];
@@ -221,10 +257,7 @@ function search_strings(freespace: number): ResultItem[]
                 label = label.slice(0, MAX_LENGTH) + '\u2026';
             }
             let span = { pos:pos, len:current_term.length };
-            let sourceloc = str.sourceloc;
-            if (typeof sourceloc !== 'string')
-                sourceloc = sourceloc[0];  //### cache and increment?
-            res.push({ idtype:'str', label:label, span:span, sourceloc:sourceloc });
+            res.push({ idtype:'str', label:label, span:span, sourceloc:str.sourceloc });
         }
     }
 
