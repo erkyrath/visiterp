@@ -109,22 +109,22 @@ function search_basics(freespace: number): ResultItem[]
     let res: ResultItem[] = [];
     
     let obj = gamedat_object_names.get(current_term);
-    if (obj) {
+    if (obj && obj.sourceloc) {
         res.push({ idtype:'obj', label:obj.name, sourceloc:obj.sourceloc });
     }
 
     let glob = gamedat_global_names.get(current_term);
-    if (glob) {
+    if (glob && glob.sourceloc) {
         res.push({ idtype:'glob', label:glob.name, sourceloc:glob.sourceloc });
     }
 
     let rtn = gamedat_routine_names.get(current_term);
-    if (rtn) {
+    if (rtn && rtn.sourceloc) {
         res.push({ idtype:'rtn', label:rtn.name, sourceloc:rtn.sourceloc });
     }
 
     let con = gamedat_constant_names.get(current_term);
-    if (con) {
+    if (con && con.sourceloc) {
         res.push({ idtype:'const', label:con.name, sourceloc:con.sourceloc });
     }
 
@@ -135,7 +135,7 @@ function search_basics(freespace: number): ResultItem[]
 
     const gamedat_objects: ObjectData[] = winany.gamedat_objects;
     for (let obj of gamedat_objects) {
-        if (obj.name.indexOf(current_term) >= 0 && obj.name != current_term) {
+        if (obj.name.indexOf(current_term) >= 0 && obj.name != current_term && obj.sourceloc) {
             res.push({ idtype:'obj', label:obj.name, sourceloc:obj.sourceloc });
         }
     }
@@ -145,7 +145,7 @@ function search_basics(freespace: number): ResultItem[]
     
     const gamedat_globals: GlobalData[] = winany.gamedat_globals;
     for (let glob of gamedat_globals) {
-        if (glob.name.indexOf(current_term) >= 0 && glob.name != current_term) {
+        if (glob.name.indexOf(current_term) >= 0 && glob.name != current_term && glob.sourceloc) {
             res.push({ idtype:'glob', label:glob.name, sourceloc:glob.sourceloc });
         }
     }
@@ -164,7 +164,7 @@ function search_routines(freespace: number): ResultItem[]
         if (res.length >= freespace)
             break;
         
-        if (rtn.name.indexOf(current_term) >= 0 && rtn.name != current_term) {
+        if (rtn.name.indexOf(current_term) >= 0 && rtn.name != current_term && rtn.sourceloc) {
             res.push({ idtype:'rtn', label:rtn.name, sourceloc:rtn.sourceloc });
         }
     }
@@ -183,7 +183,7 @@ function search_constants(freespace: number): ResultItem[]
         if (res.length >= freespace)
             break;
         
-        if (con.name.indexOf(current_term) >= 0 && con.name != current_term) {
+        if (con.name.indexOf(current_term) >= 0 && con.name != current_term && con.sourceloc) {
             res.push({ idtype:'const', label:con.name, sourceloc:con.sourceloc });
         }
     }
