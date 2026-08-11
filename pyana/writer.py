@@ -105,11 +105,15 @@ def sourceloc(tup=None, endtup=None, tok=None):
         efile, eline, echar = endtup
         if file != efile:
             raise Exception('sourceloc span across files')
+        if echar == 0:
+            echarstr = ''
+            eline -= 1
+        else:
+            echarstr = str(echar)
         if eline == line:
             elinestr = ''
         else:
             elinestr = str(eline)
-        echarstr = str(echar)
         res += ':%s:%s' % (elinestr, echarstr,)
     return res
 
