@@ -96,12 +96,21 @@ def sourceloc(tup=None, endtup=None, tok=None):
         return ''
     file, line, char = tup
     filekey = sourcefile_map[file]
-    res = '%s:%d:%d' % (filekey, line, char,)
+    if char == 1:
+        charstr = ''
+    else:
+        charstr = str(char)
+    res = '%s:%d:%s' % (filekey, line, charstr,)
     if endtup:
         efile, eline, echar = endtup
         if file != efile:
             raise Exception('sourceloc span across files')
-        res += ':%d:%d' % (eline, echar,)
+        if eline == line:
+            elinestr = ''
+        else:
+            elinestr = str(eline)
+        echarstr = str(echar)
+        res += ':%s:%s' % (elinestr, echarstr,)
     return res
 
 def get_sourcefile_map():
