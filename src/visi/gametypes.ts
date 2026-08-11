@@ -48,8 +48,11 @@ export function parse_sourceloc(val: string) : SourceLoc|undefined
     let filekey = tup[0];
     
     let line, char;
-    
-    line = parseInt(tup[1]);
+
+    if (!tup[1])
+        line = 1;
+    else
+        line = parseInt(tup[1]);
     if (!tup[2])
         char = 1;
     else
