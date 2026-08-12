@@ -1,4 +1,5 @@
 import os.path
+import re
 import json
 
 from writer import get_sourcefile_map
@@ -22,7 +23,9 @@ def write_source(filename):
     json.dump(map, fl, separators=(',', ':'))
     fl.write(';\n')
     fl.close()
-    
+
+pat_spaces = re.compile('^[ ]+$')
+
 def write_source_colored(filename, zcode, reindent=False):
     sourcefile_map = get_sourcefile_map()
     print('...writing colorized', len(sourcefile_map), 'source files:', filename)
@@ -36,7 +39,11 @@ def write_source_colored(filename, zcode, reindent=False):
             ls = []
             for (col, val) in srcline:
                 if not col:
-                    ls.append(val)
+                    match = pat_spaces.match(val)
+                    if match:
+                        ls.append(match.endpos)
+                    else:
+                        ls.append(val)
                 else:
                     ls.append([str(col).title(), val])
             shortlines.append(ls)
