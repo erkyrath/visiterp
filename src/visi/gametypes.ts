@@ -223,7 +223,7 @@ export type MapRoom = {
     bottom: { x:number, y:number };
 };
 
-type SourceSpan = string | [ string, string ];
+type SourceSpan = string | number | [ string, string ];
 type SourceLine = SourceSpan[];
 
 export interface SourceLinesMap {
