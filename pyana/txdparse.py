@@ -7,11 +7,15 @@ class String:
             if not (text.startswith('"') and text.endswith('"')):
                 raise Exception('not quoted')
             text = text[ 1 : -1 ]
+        # Okay, this is hacky.
         text = text.replace('\\n', '\n')
         text = text.replace('\\t', '\t')
         text = text.replace('\\"', '\"')
-        if '\\' in text:
-            raise Exception('unknown escape')
+        if '\\\\' in text:
+            text = text.replace('\\\\', '\\')
+        else:
+            if '\\' in text:
+                raise Exception('unknown escape: ' + text)
         return text
 
     def __init__(self, addr, index, text, rtn=None):
