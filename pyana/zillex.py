@@ -285,7 +285,8 @@ class Lexer:
     def resolveincludes(self, ls):
         res = []
         for tok in ls:
-            if tok.matchform('IFILE', 1) or (tok.matchform('INSERT-CRUFTY', 1) and monkeyinsertcrufty(self.monkeypatch)):
+            if tok.matchform('IFILE', 1) or tok.matchform('INSERT-FILE', 1) or (tok.matchform('INSERT-CRUFTY', 1) and monkeyinsertcrufty(self.monkeypatch)):
+                assert tok.children[1].typ is TokType.STR
                 val = tok.children[1].val
                 val = val.lower()+'.zil'
                 incpath = os.path.join(self.dirname, val)
