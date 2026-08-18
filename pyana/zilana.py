@@ -140,22 +140,22 @@ def stripifdefs(ls, compileconstants, gameid=None, depth=0):
         if tok.typ is TokType.GROUP and tok.val == '%' and tok.children:
             ctok = tok.children[0]
             if ctok.matchform('COND', 0):
-                found = None
+                founds = None
                 for cgrp in ctok.children[ 1 : ]:
-                    found = teststaticcond(cgrp, compileconstants)
-                    if found:
+                    founds = teststaticcond(cgrp, compileconstants)
+                    if founds:
                         break
-                if found:
-                    newls.append(found)
+                if founds:
+                    newls.extend(founds)
                 continue
         elif depth == 0 and tok.matchform('COND', 0):
-            found = None
+            founds = None
             for cgrp in tok.children[ 1 : ]:
-                found = teststaticcond(cgrp, compileconstants)
-                if found:
+                founds = teststaticcond(cgrp, compileconstants)
+                if founds:
                     break
-            if found:
-                newls.append(found)
+            if founds:
+                newls.extend(founds)
             continue
         newls.append(tok)
         if tok.typ is TokType.GROUP:
@@ -164,11 +164,11 @@ def stripifdefs(ls, compileconstants, gameid=None, depth=0):
     ls.extend(newls)
 
 def teststaticcond(cgrp, compileconstants):
-    if cgrp.typ is TokType.GROUP and cgrp.val == '()' and len(cgrp.children) == 2:
+    if cgrp.typ is TokType.GROUP and cgrp.val == '()' and len(cgrp.children) >= 2:
         condgrp = cgrp.children[0]
-        resgrp = cgrp.children[1]
+        resgrps = cgrp.children[ 1 : ]
     else:
-        raise Exception('teststaticcond: not a 2-group: %s (%s)' % (cgrp, cgrp.posstr(),))
+        raise Exception('teststaticcond: not a group: %s (%s)' % (cgrp, cgrp.posstr(),))
 
     def evalstaticcond(condgrp):
         if condgrp.matchform('OR', 2):
@@ -197,7 +197,7 @@ def teststaticcond(cgrp, compileconstants):
         return False
 
     if evalstaticcond(condgrp):
-        return resgrp
+        return resgrps
     else:
         return None
 
