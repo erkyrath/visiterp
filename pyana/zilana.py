@@ -343,7 +343,10 @@ class Zcode:
                 if idtok.typ is TokType.ID:
                     proptables = {}
                     for proptok in tok.children[2:]:
-                        if proptok.matchgroup(('DESC', 'LDESC', 'FDESC', 'XDESC', 'TEXT'), 1):
+                        ### really oughtta be game-specific
+                        # MUNGDESC is Enchanter
+                        # XDESC is Witness and a few later ones
+                        if proptok.matchgroup(('DESC', 'LDESC', 'FDESC', 'XDESC', 'MUNGDESC', 'TEXT'), 1):
                             if proptok.children[1].typ is TokType.STR:
                                 strtok = proptok.children[1]
                                 if proptok.children[0].val == 'DESC':
