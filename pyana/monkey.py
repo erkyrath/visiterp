@@ -167,7 +167,7 @@ def monkeyadjuststringtext(text, gameid, rtn=None):
         if text.startswith(':\n\nDear Detective:'):
             text = text[ : -1 ]
     if gameid == 'enchanter-r29-s860820':
-        if text.startswith(' a transcript of interaction'):
+        if text.startswith(' a transcript of interaction') or text.startswith('ENCHANTER\nInfocom'):
             # The word "registered" was stuck in
             text = text.replace('a registered trademark', 'a trademark')
     return text
