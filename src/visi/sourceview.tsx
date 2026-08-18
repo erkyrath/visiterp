@@ -9,6 +9,7 @@ import { getasset } from './gamedat';
 
 import { ReactCtx } from './context';
 import { SourceLocState } from './context';
+import { SearchField, SearchResults, SearchFieldRock } from './searchtool';
 
 import { sourceloc_start } from '../custom/info';
 
@@ -18,6 +19,8 @@ export function SourceView()
     
     let rctx = useContext(ReactCtx);
     let zstate = rctx.zstate;
+
+    let rock: SearchFieldRock = { callback: null };
 
     let atstart = (rctx.sourcelocpos == 0);
     let atend = (rctx.sourcelocpos == rctx.sourcelocs.length-1);
@@ -78,6 +81,11 @@ export function SourceView()
     function evhan_click_comment(topic: string) {
         rctx.showCommentary(topic);
     }
+
+    function evhan_search_visible(has_focus?: boolean, has_term?: boolean) {
+        if (rock.callback)
+            rock.callback(has_focus, has_term);
+    }
     
     useEffect(() => {
         if (noderef.current) {
@@ -109,21 +117,27 @@ export function SourceView()
     
     return (
         <>
-            <div className="TabBar">
-                <button className="NavButton" disabled={ atstart } onClick={ evhan_click_back }>&lt;</button>
-                <button className="NavButton" disabled={ atend } onClick={ evhan_click_forward }>&gt;</button>
-                <div className="TabLabel">{ filename }</div>
+            <div className="TabBar SourceTabBar">
+                <div>
+                    <button className="NavButton" disabled={ atstart } onClick={ evhan_click_back }>&lt;</button>
+                    <button className="NavButton" disabled={ atend } onClick={ evhan_click_forward }>&gt;</button>
+                    <div className="TabLabel">{ filename }</div>
+                </div>
+                <div className="SourceSearchControl">
+                    <SearchField updatefunc={ evhan_search_visible } />
+                </div>
             </div>
             <div className="TabContent">
                 <div id="scrollcontent_file" className="ScrollContent">
                     <div className="SourceRef" ref={ noderef }></div>
                 </div>
+                <SearchResults rock={ rock } />
             </div>
         </>
     );
 }
 
-const pat_tab = new RegExp('\t', 'g');
+let spacesmap = new Map<number, string>;
 
 function rebuild_sourcefile(nodel: HTMLDivElement, locstr: string, lochi: boolean, hilites: string[], handle_click_id: (val:string)=>void, handle_click_obj: (val:number)=>void, handle_click_comment: (val:string)=>void)
 {
@@ -217,10 +231,22 @@ function rebuild_sourcefile(nodel: HTMLDivElement, locstr: string, lochi: boolea
                 else {
                     for (let span of srcln) {
                         if (typeof span === 'string') {
-                            linel.appendChild(document.createTextNode(span.replace(pat_tab, '    ')));
+                            linel.appendChild(document.createTextNode(span));
+                        }
+                        else if (typeof span === 'number') {
+                            let spaces: string;
+                            if (spacesmap.has(span)) {
+                                spaces = spacesmap.get(span)!;
+                            }
+                            else {
+                                spaces = ' '.repeat(span);
+                                spacesmap.set(span, spaces);
+                            }
+                            linel.appendChild(document.createTextNode(spaces));
                         }
                         else {
                             let [ cla, val ] = span;
+                            //### we could compress cla to two chars
                             let spanel;
                             if (cla == 'Id' || cla == 'Implid') {
                                 spanel = document.createElement('a');
@@ -244,7 +270,7 @@ function rebuild_sourcefile(nodel: HTMLDivElement, locstr: string, lochi: boolea
                                 spanel = document.createElement('span');
                                 spanel.className = 'Src_'+cla;
                             }
-                            spanel.appendChild(document.createTextNode(val.replace(pat_tab, '    ')));
+                            spanel.appendChild(document.createTextNode(val));
                             linel.appendChild(spanel);
                         }
                     }

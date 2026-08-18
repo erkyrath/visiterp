@@ -850,3 +850,113 @@ a.Src_Implid:hover {
     text-decoration: underline;
     text-decoration-style: dashed;
 }
+
+.SourceTabBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.SourceSearchControl {
+    max-width: 50%;
+    padding-right: 16px;
+}
+
+.SearchBox {
+    position: relative;
+}
+
+.SearchBox .SearchIcon {
+    position: absolute;
+    pointer-events: none;
+    transform: rotate(-45deg);
+    top: 3px;
+    left: 8px;
+    color: #888;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+input.SearchField {
+    width: 100%;
+    margin-right: 10px;
+    margin-top: 2px;
+    font-family: "Lato";
+    font-size: 14px;
+
+    background-color: #F8F8F0;
+    color: black;
+    padding: 4px 8px 4px 28px;
+    border: 1px solid #888;
+    border-radius: 20px;
+}
+
+.DarkTheme input.SearchField {
+    background-color: #282810;
+    color: white;
+}
+
+.SearchResults {
+    position: absolute;
+    top: 32px;
+    right: 16px;
+    width: 40%;
+    max-height: calc(100% - 80px);
+    overflow: clip;
+    overflow-y: auto;
+    
+    background: #F8F8F0;
+    color: black;
+
+    border: 1px solid #888;
+    border-radius: 16px;
+    padding: 12px 16px;
+
+    box-shadow: 0px 2px 4px 2px #0004, -4px 4px 4px 2px #FFF;
+}
+
+.DarkTheme .SearchResults {
+    background-color: #282810;
+    color: white;
+    box-shadow: 0px 2px 4px 2px #0008;
+}
+
+.SearchResults ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.SearchResultItem {
+    overflow: clip;
+    text-indent: 10px hanging;
+}
+
+.SearchResultItem.Location:hover {
+    background-color: #CDF;
+}
+.DarkTheme .SearchResultItem.Location:hover {
+    background-color: #2828C0;
+}
+.SearchResultItem.NoLocation {
+    color: #888;
+}
+
+.SearchResultInner {
+    pointer-events: none;
+}
+
+.SearchResultItem code {
+    font-family: "Courier Prime";
+    font-size: 90%;
+}
+.SearchResultItem .SearchResultType {
+    float: right;
+    font-size: 85%;
+    font-style: italic;
+    margin-right: 8px;
+}
+
+.SearchResultString {
+    font-size: 90%;
+}

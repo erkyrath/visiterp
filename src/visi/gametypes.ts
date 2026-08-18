@@ -32,7 +32,10 @@ export type SourceLoc = {
 };
 
 /* Parse a sourceloc string like "C:5:1" or "C:5:1:6:0" into its component
-   parts. */
+   parts. (Exactly 2 or 4 colons, please.)
+   Basically startchar defaults to 1, endline defaults to startline, and
+   endchar defaults to BIG (not 0).
+*/
 export function parse_sourceloc(val: string) : SourceLoc|undefined
 {
     if (!val.length)
@@ -43,8 +46,17 @@ export function parse_sourceloc(val: string) : SourceLoc|undefined
         return undefined;
 
     let filekey = tup[0];
-    let line = parseInt(tup[1]);
-    let char = parseInt(tup[2]);
+    
+    let line, char;
+
+    if (!tup[1])
+        line = 1;
+    else
+        line = parseInt(tup[1]);
+    if (!tup[2])
+        char = 1;
+    else
+        char = parseInt(tup[2]);
     
     if (tup.length < 5) {
         return {
@@ -55,9 +67,17 @@ export function parse_sourceloc(val: string) : SourceLoc|undefined
             endchar: 99999
         };
     }
+
+    let endline, endchar;
     
-    let endline = parseInt(tup[3]);
-    let endchar = parseInt(tup[4]);
+    if (!tup[3])
+        endline = line;
+    else
+        endline = parseInt(tup[3]);
+    if (!tup[4])
+        endchar = 99999;
+    else
+        endchar = parseInt(tup[4]);
     
     if (endchar == 0) {
         endline -= 1;
@@ -203,7 +223,7 @@ export type MapRoom = {
     bottom: { x:number, y:number };
 };
 
-type SourceSpan = string | [ string, string ];
+type SourceSpan = string | number | [ string, string ];
 type SourceLine = SourceSpan[];
 
 export interface SourceLinesMap {
