@@ -131,7 +131,7 @@ def stripcomments(ls):
     ls.clear()
     ls.extend(newls)
 
-def stripifdefs(ls, compileconstants, gameid=None):
+def stripifdefs(ls, compileconstants, gameid=None, depth=0):
     # Remove all compiled-out %<COND...> elements from ls.
     newls = []
     for tok in ls:
@@ -148,9 +148,18 @@ def stripifdefs(ls, compileconstants, gameid=None):
                 if found:
                     newls.append(found)
                 continue
+        elif depth == 0 and tok.matchform('COND', 0):
+            found = None
+            for cgrp in tok.children[ 1 : ]:
+                found = teststaticcond(cgrp, compileconstants)
+                if found:
+                    break
+            if found:
+                newls.append(found)
+            continue
         newls.append(tok)
         if tok.typ is TokType.GROUP:
-            stripifdefs(tok.children, compileconstants, gameid=gameid)
+            stripifdefs(tok.children, compileconstants, gameid=gameid, depth=depth+1)
     ls.clear()
     ls.extend(newls)
 
@@ -159,7 +168,7 @@ def teststaticcond(cgrp, compileconstants):
         condgrp = cgrp.children[0]
         resgrp = cgrp.children[1]
     else:
-        raise Exception('teststaticcond: not a group')
+        raise Exception('teststaticcond: not a 2-group: %s (%s)' % (cgrp, cgrp.posstr(),))
 
     def evalstaticcond(condgrp):
         if condgrp.matchform('OR', 2):
