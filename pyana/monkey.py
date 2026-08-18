@@ -126,7 +126,7 @@ def monkeyextrastrings():
 
 def monkeyadjuststringtext(text, gameid, rtn=None):
     text = text.replace('.  ', '. ')
-    if gameid != 'planetfall-r37-s851003':
+    if gameid not in ('planetfall-r37-s851003', 'enchanter-r29-s860820'):
         # Something about punctuation and spaces (mostly)
         text = text.replace('    ****', '   ****')
     if gameid == 'zork1-r88-s840726':
@@ -166,6 +166,10 @@ def monkeyadjuststringtext(text, gameid, rtn=None):
         # Extra trimming
         if text.startswith(':\n\nDear Detective:'):
             text = text[ : -1 ]
+    if gameid == 'enchanter-r29-s860820':
+        if text.startswith(' a transcript of interaction'):
+            # The word "registered" was stuck in
+            text = text.replace('a registered trademark', 'a trademark')
     return text
 
 def monkeyadjustmapxml(doc, gameid):
