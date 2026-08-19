@@ -209,23 +209,23 @@ function build_upstring_cache(): UpStringData[]
     let gotset: Set<string> = new Set();
     
     for (let str of gamedat_strings) {
-	let text: string = str[1];
-	if (gotset.has(text))
-	    continue;
+        let text: string = str[1];
+        if (gotset.has(text))
+            continue;
 
-	gotset.add(text);
-	
-	let uptext = text.toUpperCase();
-	let sourceloc: string|string[] = str[2];
+        gotset.add(text);
+        
+        let uptext = text.toUpperCase();
+        let sourceloc: string|string[] = str[2];
 
-	if (typeof sourceloc === 'string') {
-	    res.push({ text:text, uptext:uptext, sourceloc:sourceloc });
-	}
-	else {
-	    for (let loc of sourceloc) {
-		res.push({ text:text, uptext:uptext, sourceloc:loc });
-	    }
-	}
+        if (typeof sourceloc === 'string') {
+            res.push({ text:text, uptext:uptext, sourceloc:sourceloc });
+        }
+        else {
+            for (let loc of sourceloc) {
+                res.push({ text:text, uptext:uptext, sourceloc:loc });
+            }
+        }
     }
 
     return res;
