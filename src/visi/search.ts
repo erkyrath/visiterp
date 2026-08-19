@@ -216,7 +216,11 @@ function build_upstring_cache(): UpStringData[]
         gotset.add(text);
         
         let uptext = text.toUpperCase();
-        let sourceloc: string|string[] = str[2];
+        let sourceloc: string|string[]|null = str[2];
+
+        if (!sourceloc) {
+            continue;
+        }
 
         if (typeof sourceloc === 'string') {
             res.push({ text:text, uptext:uptext, sourceloc:sourceloc });
