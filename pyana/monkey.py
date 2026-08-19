@@ -119,6 +119,10 @@ def monkeyadjustifdef(tok, gameid, forscolor=False):
         if tok.typ is TokType.GROUP and tok.pos == ('comptwo.zil', 3049, 23):
             # MICROBE-F last cond clause not compiled in
             return True
+    if gameid == 'enchanter-r29-s860820':
+        if tok.typ is TokType.GROUP and tok.pos == ('verbs.zil', 1157, 23):
+            # V-BURN ELSE clause not compiled in
+            return True
     return False
 
 def monkeyextrastrings():
