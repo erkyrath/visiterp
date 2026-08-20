@@ -132,6 +132,21 @@ def colorize(tokls, res, defentity, depth=0):
                         res.append( (cgrp, Color.IFNDEF) )
                         continue
                 continue
+        if depth == 0 and tok.matchform('COND', 0):
+            colorize([ tok.children[0] ], res, defentity, depth+1)
+            found = None
+            for cgrp in tok.children[ 1 : ]:
+                if found:
+                    res.append( (cgrp, Color.IFNDEF) )
+                    continue
+                found = teststaticcond(cgrp, compileconstants)
+                if found:
+                    colorize([ cgrp ], res, defentity, depth+1)
+                else:
+                    res.append( (cgrp, Color.IFNDEF) )
+                    continue
+            continue
+            
         if tok.typ is TokType.GROUP and tok.val == '()' and tok.children:
             if tok.children[0].idmatch(('SYNONYM', 'ADJECTIVE')):
                 for subtok in tok.children[1:]:
