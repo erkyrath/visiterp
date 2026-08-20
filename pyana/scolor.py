@@ -83,7 +83,7 @@ class Color(StrEnum):
     COMMENT = 'COMMENT'   # Commented-out element
     IFNDEF = 'IFNDEF'     # Compiled-out element
 
-def colorize(tokls, res, defentity):
+def colorize(tokls, res, defentity, depth=0):
     localids = set()
     if defentity and isinstance(defentity, ZRoutine):
         localids = set(defentity.args)
@@ -119,7 +119,7 @@ def colorize(tokls, res, defentity):
         if tok.typ is TokType.GROUP and tok.val == '%' and tok.children:
             ctok = tok.children[0]
             if ctok.matchform('COND', 0):
-                colorize([ ctok.children[0] ], res, defentity)
+                colorize([ ctok.children[0] ], res, defentity, depth+1)
                 found = None
                 for cgrp in ctok.children[ 1 : ]:
                     if found:
@@ -127,7 +127,7 @@ def colorize(tokls, res, defentity):
                         continue
                     found = teststaticcond(cgrp, compileconstants)
                     if found:
-                        colorize([ cgrp ], res, defentity)
+                        colorize([ cgrp ], res, defentity, depth+1)
                     else:
                         res.append( (cgrp, Color.IFNDEF) )
                         continue
@@ -170,7 +170,7 @@ def colorize(tokls, res, defentity):
                 if subtok.typ is TokType.ID and subtok.val != 'OBJECT':
                     res.append( (subtok, Color.DICT) )
                 eqpos += 1
-            colorize(tok.children[ eqpos+1 : ], res, defentity)
+            colorize(tok.children[ eqpos+1 : ], res, defentity, depth+1)
             continue
         
         if tok.children:
@@ -179,7 +179,7 @@ def colorize(tokls, res, defentity):
                 lockey = tok.posstr()
                 if lockey in loctoentity:
                     subentity = loctoentity[lockey]
-            colorize(tok.children, res, subentity)
+            colorize(tok.children, res, subentity, depth+1)
 
 def dumpcolors(ls):
     for (tok, color) in ls:
