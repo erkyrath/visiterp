@@ -294,6 +294,9 @@ class Zcode:
                     elif valtok.matchform('IVECTOR', 1) or valtok.matchform('IUVECTOR', 1):
                         # Top-level array in Suspended which is not relevant.
                         continue
+                    elif valtok.matchform('SETG', 1):
+                        # Top-level array in Witness which is not relevant.
+                        continue
                     else:
                         constval = self.parseconstant(valtok)
                         if constval is None:
