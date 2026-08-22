@@ -9,7 +9,7 @@ import { gamedat_global_nums, gamedat_globals_sort_index, gamedat_globals_sort_a
 
 import { ReactCtx } from './context';
 import { ObjPageLink, Commentary } from './widgets';
-import { VarShowObject, VarShowString, VarShowWord, VarShowAdjective, VarShowGrammarLine, VarShowAction, VarShowProperty } from './globshow';
+import { VarShowObject, VarShowString, VarShowWord, VarShowAdjective, VarShowGrammarLine, VarShowAction, VarShowVerb, VarShowProperty } from './globshow';
 import { global_value_display } from '../custom/cwidgets';
 
 export type GlobListContextContent = {
@@ -139,6 +139,9 @@ export function GlobalVar({ index, value, origvalue }: { index:number, value:num
             break;
         case 'ACTION':
             vartype = <VarShowAction value={ value } />;
+            break;
+        case 'VERB':
+            vartype = <VarShowVerb value={ value } />;
             break;
         case 'PROP':
             vartype = <VarShowProperty value={ value } />;

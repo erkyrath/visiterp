@@ -36,6 +36,22 @@ export function VarShowAction({ value }: { value:number })
     return (<i>invalid action { value }</i>);
 }
 
+export function VarShowVerb({ value }: { value:number })
+{
+    let verb = gamedat_grammar_verbnums.get(value);
+    if (verb && verb.words.length) {
+        return (
+            <span className="PrintDictWord">&#x2018;{ verb.words[0] }&#x2019;</span>
+        );
+    }
+
+    if (value == 0) {
+        return (<i>no verb</i>);
+    }
+
+    return (<i>invalid verb { value }</i>);
+}
+
 export function VarShowProperty({ value }: { value:number })
 {
     let prop = gamedat_property_nums.get(value);
