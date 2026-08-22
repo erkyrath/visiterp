@@ -639,6 +639,43 @@ def display_globals_ana(zcode, txdat):
             lsval = ', '.join(ls)
             print('### Global %d ### %s' % (val, lsval,))
 
+def display_globals_ana_verbose(zcode, txdat, fname):
+    load_gameinfo()
+    if len(zcode.routines) != len(txdat.routines):
+        raise Exception('routine length mismatch (%d vs %d)' % (len(zcode.routines), len(txdat.routines),))
+
+    sortedroutines = sort_zcode_routines(zcode.routines, zcode.sourceorder)
+    nametoaddr = {}
+    for zfunc, tfunc in zip(sortedroutines, txdat.routines):
+        nametoaddr[zfunc.name] = (zfunc, tfunc)
+
+    zfunc, tfunc = nametoaddr[fname]
+    print('Routine', fname, 'at', tfunc.addr, hex(tfunc.addr))
+
+    txuse = []
+    zuse = []
+
+    pat_glob = re.compile('G[0-9a-f][0-9a-f]')
+    for (addr, opcode, opargs) in tfunc.opcodes:
+        for arg in opargs:
+            if pat_glob.match(arg):
+                argnum = int(arg[ 1 : ], 16)
+                txuse.append(str(argnum))
+
+    globset = set([ glob.name for glob in zcode.globals ])
+    def findglobs(tok):
+        if tok.typ is TokType.ID and tok.val in globset:
+            zuse.append(tok.val)
+
+    zfunc.rtok.itertree(findglobs)
+    
+    if len(zuse) == len(txuse):
+        for (zval, tval) in zip(zuse, txuse):
+            print(tval+':', zval)
+    else:
+        print('TXD:', ' '.join(txuse))
+        print('ZCODE:', ' '.join(zuse))
+        
 def write_constants(filename, zcode):
     print('...writing constants data:', filename)
     ls = []
