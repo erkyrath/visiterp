@@ -507,6 +507,8 @@ def guessargtype(funcname, argname, index):
         return 'STR'
     if argname == 'RTN':
         return 'RTN'
+    if argname == 'TBL':
+        return 'TABLE'
     if argname == 'PREP':
         return 'PREP'
     if argname == 'RARG':
