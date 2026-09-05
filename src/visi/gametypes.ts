@@ -189,7 +189,7 @@ export type TableData = {
     addr: number;
     name: string;
     arrindex?: string;
-    len: number;
+    len?: number;
     ltable?: boolean;
     sourceloc: string;
     values?: number[];

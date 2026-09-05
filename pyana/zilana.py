@@ -275,6 +275,8 @@ class Zcode:
                         if globtok.children[0].val in ('TABLE', 'LTABLE', 'PTABLE', 'PLTABLE'):
                             self.findstringsintok(globtok)
                             zglob.table = self.findnestedtablesintok(globtok)
+                        if globtok.children[0].val == 'ITABLE':
+                            zglob.table = self.findnestedtablesintok(globtok)
             if tok.matchform('CONSTANT', 2) or tok.matchform('SETG', 2):
                 # SETG is for compile-time constants like ZORK-NUMBER and
                 # DEBUG. We'll put them in the regular constant table.
@@ -472,7 +474,12 @@ class Zcode:
                 self.findstringsinroutine(stok, rtn)
 
     def findnestedtablesintok(self, valtok):
-        assert valtok.children[0].val in ('TABLE', 'LTABLE', 'PTABLE', 'PLTABLE')
+        assert valtok.children[0].val in ('TABLE', 'LTABLE', 'PTABLE', 'PLTABLE', 'ITABLE')
+        if valtok.children[0].val == 'ITABLE':
+            # ITABLE does not have nested children, and figuring out the
+            # length is horrible.
+            table = ZNestedTable(valtok.children[0].val, valtok, None)
+            return table
         table = ZNestedTable(valtok.children[0].val, valtok, len(valtok.children)-1)
         ls = []
         for stok in valtok.children[ 1 : ]:

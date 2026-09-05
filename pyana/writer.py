@@ -815,10 +815,11 @@ def write_tables(filename, zcode, gamefile):
             accum = []
         dat = {
             'name': globname,
-            'len': tab.length,
             'addr': addr,
             'sourceloc': sourceloc(tok=tab.tok)
         }
+        if tab.length is not None:
+            dat['len'] = tab.length
         # The "P" indicates the array is in high memory, which we don't care about.
         if tab.typ in ('LTABLE', 'PLTABLE'):
             dat['ltable'] = True
