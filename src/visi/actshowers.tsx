@@ -222,7 +222,7 @@ export function ArgShowPSWordType({ value }: { value:number })
     let valstr = '???';
     switch (value) {
     case 0x04:
-        valstr = 'spec';
+        valstr = 'buzz';
         break;
     case 0x08:
         valstr = 'prep';
