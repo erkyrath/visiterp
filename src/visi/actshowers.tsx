@@ -66,6 +66,16 @@ export function ArgShowAttribute({ value }: { value:number })
     return (<i>?attr:{ value }</i>);
 }
 
+export function ArgShowAttributeZ({ value }: { value:number })
+{
+    if (value == 0) {
+        return (<i>no-attr</i>);
+    }
+    else {
+        return (<ArgShowAttribute value={ value } />);
+    }
+}
+
 export function ArgShowString({ value }: { value:number })
 {
     if (value == 0) {
