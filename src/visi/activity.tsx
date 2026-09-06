@@ -8,7 +8,7 @@ import { gamedat_string_map, gamedat_routine_addrs, gamedat_dictword_addrs } fro
 import { stack_call_arg_display } from '../custom/cwidgets';
 
 import { ReactCtx, StackCallCtx } from './context';
-import { ArgShowObject, ArgShowAttribute, ArgShowProperty, ArgShowRoutine, ArgShowString, ArgShowTable, ArgShowAction, ArgShowWord, ArgShowPreposition, ArgShowGrammarLine, ArgShowMFlag } from './actshowers';
+import { ArgShowObject, ArgShowAttribute, ArgShowProperty, ArgShowRoutine, ArgShowString, ArgShowTable, ArgShowAction, ArgShowWord, ArgShowPreposition, ArgShowGrammarLine, ArgShowSyntaxLocBits, ArgShowMFlag } from './actshowers';
 
 type SelPair = [ number, number ];
 
@@ -247,6 +247,10 @@ export function StackCallArg({ value, argtype }: { value:number, argtype:string|
     case 'GLINE':
         return (
             <ArgShowGrammarLine value={ value } />
+        )
+    case 'SLOCBITS':
+        return (
+            <ArgShowSyntaxLocBits value={ value } />
         )
     case 'MFLAG':
         return (
