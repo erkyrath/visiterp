@@ -217,6 +217,54 @@ export function ArgShowSyntaxLocBits({ value }: { value:number })
     return (<span>{ value }:<i>{ valstr }</i></span>);
 }
 
+export function ArgShowPSWordType({ value }: { value:number })
+{
+    let valstr = '???';
+    switch (value) {
+    case 0x04:
+        valstr = 'spec';
+        break;
+    case 0x08:
+        valstr = 'prep';
+        break;
+    case 0x10:
+        valstr = 'dir';
+        break;
+    case 0x20:
+        valstr = 'adj';
+        break;
+    case 0x40:
+        valstr = 'verb';
+        break;
+    case 0x80:
+        valstr = 'obj';
+        break;
+    }
+    
+    return (<span>{ value }:<i>{ valstr }</i></span>);
+}
+
+export function ArgShowP1WordType({ value }: { value:number })
+{
+    let valstr = '???';
+    switch (value) {
+    case 0x00:
+        valstr = 'obj';
+        break;
+    case 0x01:
+        valstr = 'verb';
+        break;
+    case 0x02:
+        valstr = 'adj';
+        break;
+    case 0x03:
+        valstr = 'dir';
+        break;
+    }
+    
+    return (<span>{ value }:<i>{ valstr }</i></span>);
+}
+
 export function ArgShowMFlag({ value }: { value:number })
 {
     /* Zork-specific -- see gmain.zil */
