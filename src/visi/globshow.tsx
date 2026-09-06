@@ -160,3 +160,29 @@ export function VarShowGrammarLine({ value }: { value:number })
     return (<i>invalid grammar { value }</i>);
 }
 
+export function VarShowSyntaxLocBits({ value }: { value:number })
+{
+    let valstr = '-';
+    if (value) {
+        let ls: string[] = [];
+        if (value & 128)
+            ls.push('p');   // 128=SH    "HELD"
+        if (value & 64)
+            ls.push('c');   //  64=SC    "CARRIED"
+        if (value & 32)
+            ls.push('i');   //  32=SIR   "IN-ROOM"
+        if (value & 16)
+            ls.push('o');   //  16=SOG   "ON-GROUND"
+        if (value & 8)
+            ls.push('t');   //   8=STAKE "TAKE"
+        if (value & 4)
+            ls.push('m');   //   4=SMANY "MANY"
+        if (value & 2)
+            ls.push('h');   //   2=SHAVE "HAVE"
+        if (value & 1)
+            ls.push('?');
+        valstr = ls.join('');
+    }
+    
+    return (<span>{ value } <i>({ valstr })</i></span>);
+}
